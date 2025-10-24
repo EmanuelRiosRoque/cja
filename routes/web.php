@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NuevaSesionController;
 use App\Livewire\Wizards\ApplicationWizard;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-
-
+    Route::get('/create/sesion', [NuevaSesionController::class, 'index'])->name('index.sesion');
 });
-Route::get('/contact-wizard', ApplicationWizard::class)->name('contact.wizard');
 

@@ -14,6 +14,8 @@
     @livewireStyles
 
     <style>[x-cloak]{display:none!important}</style>
+
+    {{-- <wireui:scripts /> --}}
   </head>
   <body class="font-sans antialiased">
     <x-banner />
@@ -37,7 +39,7 @@
       @endif
 
       {{-- CONTENIDO: sin padding superior extra y anulando mt del primer hijo --}}
-      <main class="sm:ml-[var(--sbw,18rem)] h-full overflow-y-auto bg-gray-50">
+      <main class="sm:ml-[var(--sbw,18rem)] h-full overflow-y-auto mb-96 bg-gray-50">
         <div class="pt-0 pb-8 px-4 sm:px-6 lg:px-8">
           <div class="max-w-7xl mx-auto [&>*:first-child]:mt-0">
             {{ $slot }}
