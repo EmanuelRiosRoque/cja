@@ -2,105 +2,114 @@
 
 namespace App\Livewire;
 
+use App\Models\Sede;
+use App\Models\TipoSesion;
+use App\Models\CaracterSesion;
+use App\Models\Sesion;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class SesionForm extends Component
 {
-    /* ===== Campos del formulario ===== */
-    public string $forma_captura = 'programada'; // programada | referida
+    // ===== CAMPOS =====
+    public string $forma_captura = 'programada';
+    public ?string $sede = null;
+    public ?string $tipo_sesion = null;
+    public ?string $caracter = null;
+    public ?string $fecha_programada = null;
+    public ?string $hora_programada = null;
+    public ?string $hora_termino = null;
 
-    public ?string $sede = null;           // ej. civil | penal
-    public ?string $tipo_sesion = null;    // ej. ordinaria | extraordinaria
-    public ?string $caracter = null;       // ej. publica | privada
+    public array $recesos = [];
 
-    public ?string $fecha_programada = null; // YYYY-MM-DD
-    public ?string $hora_programada = null;  // HH:MM
-    public ?string $hora_termino = null;     // HH:MM
+    // ===== CATÁLOGOS =====
+    public $sedes = [];
+    public $tipo_sesiones = [];
+    public $caracteres_sesiones = [];
 
-    /** Si quieres manejar recesos dinámicos, déjalo listo */
-    public array $recesos = []; // cada item puede ser ['inicio' => 'HH:MM', 'fin' => 'HH:MM']
+    public function mount()
+    {
+        $this->sedes = Sede::all();
+        $this->tipo_sesiones = TipoSesion::all();
+        $this->caracteres_sesiones = CaracterSesion::all();
+    }
 
-    /* ===== Reglas de validación ===== */
+    // ===== VALIDACIÓN =====
     protected function rules(): array
     {
         return [
-            'forma_captura'    => ['required', Rule::in(['programada', 'referida'])],
-            'sede'             => ['required', Rule::in(['civil', 'penal'])],
-            'tipo_sesion'      => ['required', Rule::in(['ordinaria', 'extraordinaria'])],
-            'caracter'         => ['required', Rule::in(['publica', 'privada'])],
+            'forma_captura' => ['required', Rule::in(['programada', 'referida'])],
+            'sede' => ['required'],
+            'tipo_sesion' => ['required'],
+            'caracter' => ['required'],
             'fecha_programada' => ['required', 'date'],
-            'hora_programada'  => ['required', 'date_format:H:i'],
-            'hora_termino'     => ['required', 'date_format:H:i', 'after:hora_programada'],
-            // si quieres validar recesos, añade aquí reglas para $recesos.*
+            'hora_programada' => ['required', 'date_format:H:i'],
+            'hora_termino' => ['required', 'date_format:H:i', 'after:hora_programada'],
         ];
     }
 
     protected function messages(): array
     {
         return [
-            'sede.required'             => 'Selecciona la sede.',
-            'tipo_sesion.required'      => 'Selecciona el tipo de sesión.',
-            'caracter.required'         => 'Selecciona el carácter de la sesión.',
+            'sede.required' => 'Selecciona la sede.',
+            'tipo_sesion.required' => 'Selecciona el tipo de sesión.',
+            'caracter.required' => 'Selecciona el carácter de la sesión.',
             'fecha_programada.required' => 'Indica la fecha programada.',
-            'hora_programada.required'  => 'Indica la hora programada.',
-            'hora_termino.required'     => 'Indica la hora estimada de término.',
-            'hora_termino.after'        => 'La hora de término debe ser posterior a la hora programada.',
+            'hora_programada.required' => 'Indica la hora programada.',
+            'hora_termino.after' => 'La hora de término debe ser posterior a la programada.',
         ];
     }
 
-    /** Validación campo a campo en tiempo real */
-    public function updated($property): void
+    public function updated($property)
     {
         $this->validateOnly($property);
     }
 
-    /* ===== Acciones ===== */
-
-    /** Agrega un receso por defecto (puedes abrir modal si prefieres) */
-    public function agregarReceso(): void
+    // ===== ACCIONES =====
+    public function agregarReceso()
     {
-        $this->recesos[] = [
-            'inicio' => null,
-            'fin'    => null,
-        ];
-        // Ejemplo: $this->dispatch('toast', type:'info', message:'Receso agregado');
+        // 1️⃣ Agregamos nuevo receso vacío
+        $this->recesos[] = ['inicio' => null, 'fin' => null];
+
+        // 2️⃣ Validamos el formulario (solo para mostrar datos correctos)
+        $data = $this->validate();
+
+        // 3️⃣ Mostramos todo el estado actual del componente
+        dd([
+            'forma_captura' => $this->forma_captura,
+            'sede' => $this->sede,
+            'tipo_sesion' => $this->tipo_sesion,
+            'caracter' => $this->caracter,
+            'fecha_programada' => $this->fecha_programada,
+            'hora_programada' => $this->hora_programada,
+            'hora_termino' => $this->hora_termino,
+            'recesos' => $this->recesos,
+        ]);
     }
 
-    /** Guarda / continúa el flujo */
     public function continuar()
     {
         $data = $this->validate();
 
-        // TODO: ajusta al modelo real que uses (ej. Sesion)
-        // use App\Models\Sesion;
+        dd($data); // 🔍 Verifica datos antes de guardar
+
         // $sesion = Sesion::create([
-        //     'forma_captura'    => $data['forma_captura'],
-        //     'sede'             => $data['sede'],
-        //     'tipo_sesion'      => $data['tipo_sesion'],
-        //     'caracter'         => $data['caracter'],
-        //     'fecha_programada' => $data['fecha_programada'],
-        //     'hora_programada'  => $data['hora_programada'],
-        //     'hora_termino'     => $data['hora_termino'],
+        //     'forma_captura' => $this->forma_captura,
+        //     'sede_id' => $this->sede,
+        //     'tipo_sesion_id' => $this->tipo_sesion,
+        //     'caracter_sesion_id' => $this->caracter,
+        //     'fecha_programada' => $this->fecha_programada,
+        //     'hora_programada' => $this->hora_programada,
+        //     'hora_termino' => $this->hora_termino,
         // ]);
 
-        // Si guardas recesos:
-        // foreach ($this->recesos as $r) {
-        //     if (!empty($r['inicio']) && !empty($r['fin'])) {
-        //         $sesion->recesos()->create($r);
-        //     }
-        // }
-
-        // Mensaje/redirect
-        session()->flash('success', 'Sesión guardada correctamente.');
-        // return redirect()->route('sesiones.show', $sesion); // Ajusta a tu ruta
+        session()->flash('success', '✅ Sesión agregada correctamente.');
+        return redirect()->route('sesiones.index');
     }
 
-    /** Cancela y redirige (ajusta la ruta) */
     public function cancelar()
     {
-        return redirect()->route('sesiones.index');
+        return redirect()->route('dashboard');
     }
 
     public function render()
