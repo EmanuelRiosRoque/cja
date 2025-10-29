@@ -1,54 +1,64 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <title>{{ config('app.name', 'Laravel') }}</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <style>[x-cloak]{display:none!important}</style>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @livewireStyles
 
-    {{-- <wireui:scripts /> --}}
-  </head>
-  <body class="font-sans antialiased">
-    <x-banner />
+  <style>
+    [x-cloak] {
+      display: none !important
+    }
+  </style>
 
-    {{-- Wrapper: sin scroll en body, el scroll vive en <main> --}}
-    <div class="bg-gray-100 h-[100svh] overflow-hidden grid grid-rows-[auto,1fr]">
+  {{--
+  <wireui:scripts /> --}}
+</head>
+
+<body class="font-sans antialiased">
+  <x-banner />
+
+  {{-- Wrapper: sin scroll en body, el scroll vive en <main> --}}
+    <div class="bg-gray-100 min-h-[100svh] grid grid-rows-[auto,1fr]"> {{-- quité overflow-hidden --}}
       @livewire('navigation-menu')
 
-      {{-- HEADER compacto (sin padding grande) --}}
       @if (isset($header))
-        <header class="bg-white border-b sm:ml-[var(--sbw,18rem)]">
-          <div class="px-4 py-4 sm:px-6 lg:px-8">
-            <div class="max-w-7xl mx-auto">
-              {{-- El slot decide el padding; por defecto le ponemos poco espacio --}}
-              <div class="py-2">
-                {{ $header }}
-              </div>
+      <header class="bg-white border-b sm:ml-[var(--sbw,18rem)] sticky top-0 z-40">
+        <div class="px-4 py-4 sm:px-6 lg:px-8">
+          <div class="max-w-7xl mx-auto">
+            <div class="py-2">
+              {{ $header }}
             </div>
           </div>
-        </header>
+        </div>
+      </header>
       @endif
 
-      {{-- CONTENIDO: sin padding superior extra y anulando mt del primer hijo --}}
-      <main class="sm:ml-[var(--sbw,18rem)] h-full overflow-y-auto mb-96 bg-gray-50">
-        <div class="pt-0 pb-8 px-4 sm:px-6 lg:px-8">
-          <div class="max-w-7xl mx-auto [&>*:first-child]:mt-0">
-            {{ $slot }}
+      {{-- Fila 2 de la grid: debes darle min-h-0 para permitir overflow al hijo --}}
+      <section class="min-h-[100svh] bg-gray-50">
+        <main class="sm:ml-[var(--sbw,18rem)] min-h-full overflow-y-auto">
+          <div class="pt-0 pb-8 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto [&>*:first-child]:mt-0">
+              {{ $slot }}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </section>
+
     </div>
+
 
     @stack('modals')
     @livewireScripts
-  </body>
+</body>
+
 </html>

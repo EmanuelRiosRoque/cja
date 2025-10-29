@@ -71,7 +71,7 @@
                     </li>
 
                     <li>
-                        <x-nav.item href="{{ route('index.sesion') }}" route="index.sesion">
+                        <x-nav.item href="{{ route('sesion.create') }}" route="sesion.create">
                             <x-slot:icon>
                                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     aria-hidden="true">
@@ -84,6 +84,23 @@
                                 </svg>
                             </x-slot:icon>
                             {{ __('Programar Sesión') }}
+                        </x-nav.item>
+                    </li>
+
+                    <li>
+                        <x-nav.item href="{{ route('sesion.index') }}" route="sesion.index">
+                            <x-slot:icon>
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                </svg>
+                            </x-slot:icon>
+                            {{ __('Seguimiento a Sesiones') }}
                         </x-nav.item>
                     </li>
 
@@ -158,11 +175,15 @@
     </aside>
 
     {{-- Botón para mostrar cuando está oculto --}}
-    <button x-cloak x-show="collapsed && !open" @click="collapsed = false"
-        class="hidden sm:flex fixed top-3 left-3 z-40 p-2.5 rounded-xl bg-white border border-gray-200 shadow-md hover:bg-gray-50 active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
-        aria-label="Mostrar sidebar" title="Mostrar sidebar">
-        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5l7 7-7 7" />
-        </svg>
-    </button>
+   <button
+  x-cloak
+  x-show="!open && collapsed"
+  @click="collapsed = false"
+  class="sm:flex fixed top-3 left-3 z-[60] p-2.5 rounded-xl bg-white border border-gray-200 shadow-md hover:bg-gray-50 active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
+  aria-label="Mostrar sidebar" title="Mostrar sidebar"
+>
+  <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5l7 7-7 7" />
+  </svg>
+</button>
 </div>

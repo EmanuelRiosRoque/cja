@@ -1,26 +1,24 @@
 @props([
   'label' => null,
-  'name' => null,                 // opcional: para POST clásico (agrega hidden con name)
-  'value' => null,                // YYYY-MM-DD valor inicial si NO usas wire:model
+  'name' => null,
+  'value' => null,
   'placeholder' => 'Selecciona fecha',
 
   // Config
-  'firstDay' => 1,                // 1 = Lunes
-  'min' => null,                  // YYYY-MM-DD
-  'max' => null,                  // YYYY-MM-DD
-  'disabledDates' => [],          // ['2025-10-31', ...]
-  'disabledDaysOfWeek' => [],     // [0..6] 0=Dom
-  'disablePast' => false,         // ⬅️ NUEVO: true = no permitir días pasados
+  'firstDay' => 1,
+  'min' => null,
+  'max' => null,
+  'disabledDates' => [],
+  'disabledDaysOfWeek' => [],
+  'disablePast' => false,
 ])
 
 @php
-  // Extrae cualquier wire:model(.defer/.live) del USO del componente
   $wireModelAttr =
       $attributes->get('wire:model')
       ?? $attributes->get('wire:model.defer')
       ?? $attributes->get('wire:model.live');
 
-  // Para validación/claves de error
   $errorKey = $name ?: $wireModelAttr;
 @endphp
 
@@ -33,7 +31,7 @@
     disabled: @json($disabledDates),
     disabledDows: @json($disabledDaysOfWeek),
     firstDay: @json((int)$firstDay),
-    disablePast: @json((bool)$disablePast),     // ⬅️ pasa la config a Alpine
+    disablePast: @json((bool)$disablePast),
   })"
   x-id="['dp']"
 >
@@ -72,9 +70,10 @@
       </svg>
     </button>
 
-    {{-- Hidden que SINCRONIZA con Livewire (coloca aquí el wire:model del USO) --}}
+    {{-- Hidden que SINCRONIZA con Livewire --}}
     <input
       type="hidden"
+      x-ref="hidden"
       x-model="value"
       {{ $attributes->whereStartsWith('wire:model') }}
       @change.window="
@@ -86,6 +85,13 @@
       @dp:set.window="value = $event.detail; display = formatDisplay($event.detail)"
       @dp:clear.window="value = null; display='';"
       @if($name) name="{{ $name }}" @endif
+      {{-- Red de seguridad: cuando cambie value, forzar eventos para Livewire --}}
+      x-effect="
+        if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+          $refs.hidden.dispatchEvent(new Event('input', { bubbles: true }));
+          $refs.hidden.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      "
     >
   </div>
 
@@ -100,7 +106,7 @@
        @keydown.escape.window="close()" @click="close()"
        class="fixed inset-0 z-[9998]"></div>
 
-  {{-- Panel (aislado de Livewire) --}}
+  {{-- Panel calendario --}}
   <div x-show="isOpen" x-transition x-cloak
        @click.stop
        wire:ignore
@@ -140,7 +146,7 @@
         </div>
       </div>
 
-      {{-- Popovers año/mes --}}
+      {{-- Popovers años / meses --}}
       <div x-show="showYears" x-transition x-cloak
            class="absolute z-10 mt-2 w-24 max-h-56 overflow-auto bg-white border border-neutral-200 rounded-xl shadow"
            style="left:.25rem;">
@@ -191,7 +197,7 @@
 document.addEventListener('alpine:init', () => {
   Alpine.data('dpLivewire', (opts = {}) => ({
     // Estado
-    value: opts.initial || null,      // YYYY-MM-DD
+    value: opts.initial || null,   // YYYY-MM-DD
     display: '',
     isOpen: false,
     year: 0,
@@ -202,7 +208,7 @@ document.addEventListener('alpine:init', () => {
     disabledSet: new Set((opts.disabled || []).map(String)),
     disabledDows: new Set(opts.disabledDows || []),
     firstDay: Number.isInteger(opts.firstDay) ? opts.firstDay : 1,
-    disablePast: !!opts.disablePast,                          // ⬅️ NUEVO en estado
+    disablePast: !!opts.disablePast,
 
     showYears: false,
     showMonths: false,
@@ -275,24 +281,15 @@ document.addEventListener('alpine:init', () => {
 
     isDateDisabled(iso){
       const dt = new Date(iso + 'T00:00:00');
-
-      // min / max
       if (this.min && dt < new Date(this.min.getFullYear(), this.min.getMonth(), this.min.getDate())) return true;
       if (this.max && dt > new Date(this.max.getFullYear(), this.max.getMonth(), this.max.getDate())) return true;
-
-      // ⬅️ NUEVO: bloquear fechas pasadas respecto a hoy
       if (this.disablePast) {
         const today = new Date();
         const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         if (dt < todayStart) return true;
       }
-
-      // días de semana
       if (this.disabledDows.size && this.disabledDows.has(dt.getDay())) return true;
-
-      // fechas exactas
       if (this.disabledSet.has(iso)) return true;
-
       return false;
     },
     isDisabled(day){ return this.isDateDisabled(this.isoOf(day)); },
@@ -303,10 +300,18 @@ document.addEventListener('alpine:init', () => {
       this.apply(iso);
     },
 
+    // Cambio clave: forzar sincronización con Livewire
     apply(iso){
-      this.value = iso;                         // x-model -> hidden (Livewire lo recoge)
-      this.display = this.formatDisplay(iso);   // texto legible
-      this.$dispatch('change', { value: iso }); // evento opcional
+      this.value = iso;
+      this.display = this.formatDisplay(iso);
+
+      this.$nextTick(() => {
+        if (this.$refs.hidden) {
+          this.$refs.hidden.dispatchEvent(new Event('input',  { bubbles: true }));
+          this.$refs.hidden.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
       this.close();
     },
 

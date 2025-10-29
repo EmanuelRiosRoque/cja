@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SedeSeeder::class,
             TipoSesionSeeder::class,
             CaracterSesionSeeder::class,
+            PresentadoresSeeder::class,
         ]);
 
     }
