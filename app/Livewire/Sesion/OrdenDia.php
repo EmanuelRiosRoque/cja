@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Sesion;
 
 use App\Models\Sesion;
 use App\Models\Tema;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class SesionOrdenDia extends Component
+class OrdenDia extends Component
 {
     use HelperUi;  // Nuevo Presentador / Calcular Tema / Limpiar campos
     use AccionesSobreFila; // Eliminar / Editar / Mover: Arriba o Abajo
@@ -144,6 +144,6 @@ class SesionOrdenDia extends Component
     }
     public function render()
     {
-        return view('livewire.sesion-orden-dia');
+        return view('livewire.sesion.orden-dia');
     }
 }

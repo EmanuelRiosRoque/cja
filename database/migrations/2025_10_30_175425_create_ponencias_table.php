@@ -8,21 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('presentadores', function (Blueprint $table) {
+        Schema::create('ponencias', function (Blueprint $table) {
             $table->id();
-
-            $table->string('nombre');
-            $table->string('cargo')->nullable();
-
-            // Asociación con una ponencia
-            $table->foreignId('ponencia_id')->nullable();
-
+            $table->string('nombre'); // Ejemplo: Ponencia 1, Secretaría Ejecutiva, etc.
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('presentadores');
+        Schema::dropIfExists('ponencias');
     }
 };

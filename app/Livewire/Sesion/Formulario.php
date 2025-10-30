@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Sesion;
 
 use App\Models\Sede;
 use App\Models\TipoSesion;
@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class SesionForm extends Component
+class Formulario extends Component
 {
     // ===== CAMPOS =====
     public string $forma_captura = 'programada';
@@ -242,6 +242,6 @@ class SesionForm extends Component
 
     public function render()
     {
-        return view('livewire.sesion-form');
+        return view('livewire.sesion.formulario');
     }
 }

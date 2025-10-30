@@ -27,4 +27,8 @@ class Presentador extends Model
             : $this->nombre;
     }
 
+    public function ponencia() {
+        return $this->belongsTo(Ponencia::class);
+    }
+
 }

@@ -7,7 +7,7 @@
 
     <div class="pt-2">  {{-- <- antes py-8 --}}
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-                <livewire:sesion-form />
+                <livewire:sesion.formulario />
         </div>
     </div>
 </x-app-layout>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Livewire\Sesion\Ponencia;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,8 @@ class DatabaseSeeder extends Seeder
             TipoSesionSeeder::class,
             CaracterSesionSeeder::class,
             PresentadoresSeeder::class,
+            RolesSeeder::class,
+            PonenciasSeeder::class,
         ]);
 
     }

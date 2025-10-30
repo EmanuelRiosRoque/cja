@@ -57,7 +57,6 @@
             {{-- Navegación --}}
             <nav class="flex-1 overflow-y-auto p-3">
                 <ul class="space-y-1">
-                    {{-- Ejemplo de item: usa data-active para estados --}}
                     <li>
                         <x-nav.item href="{{ route('dashboard') }}" route="dashboard">
                             <x-slot:icon>
@@ -90,31 +89,29 @@
                     <li>
                         <x-nav.item href="{{ route('sesion.index') }}" route="sesion.index">
                             <x-slot:icon>
-                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                    class="w-full h-full" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    viewBox="0 0 24 24" 
                                     aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                    <circle cx="12" cy="12" r="9" 
+                                        stroke-width="1.8" 
+                                        stroke-linecap="round" 
                                         stroke-linejoin="round" />
-                                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
-                                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                    <polyline points="12 7 12 12 15 15" 
+                                        stroke-width="1.8" 
+                                        stroke-linecap="round" 
+                                        stroke-linejoin="round" />
                                 </svg>
                             </x-slot:icon>
-                            {{ __('Seguimiento a Sesiones') }}
+                                @hasrole('Administrador')
+                                    {{ __('Sesiones Programadas') }}
+                                @else
+                                    {{ __('Seguimiento a Sesiones') }}
+                                @endhasrole
                         </x-nav.item>
                     </li>
-
-                    {{-- <li>
-                        <x-nav.item href="{{ route('users.index') }}" route="users.*">
-                            <x-slot:icon>
-                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M9 20H4v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </x-slot:icon>
-                            Usuarios
-                        </x-nav.item>
-                    </li> --}}
                 </ul>
 
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())

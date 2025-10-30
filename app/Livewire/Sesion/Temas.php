@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Sesion;
 
 use Livewire\Component;
 use App\Models\Sesion;
 
-class SesionTemas extends Component
+class Temas extends Component
 {
     /** @var \App\Models\Sesion */
     public $sesion;
@@ -25,7 +25,7 @@ class SesionTemas extends Component
 
     public function render()
     {
-        return view('livewire.sesion-temas', [
+        return view('livewire.sesion.temas', [
             'temas' => $this->temas,
         ]);
     }

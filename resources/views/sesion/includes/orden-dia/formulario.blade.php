@@ -20,9 +20,12 @@
                             class="w-full border-gray-300 rounded-md">
                             <option value="">-- Selecciona una opción --</option>
                             @foreach ($presentadores as $presentador)
-                            <option value="{{ $presentador->id }}">
-                                {{ $presentador->nombre }}{{ $presentador->cargo ? ' - '.$presentador->cargo : '' }}
-                            </option>
+                                <option value="{{ $presentador->id }}">
+                                    @if ($presentador->ponencia && $presentador->ponencia->nombre !== 'Secretaría Ejecutiva')
+                                        {{ $presentador->ponencia->nombre }}. 
+                                    @endif
+                                    {{ $presentador->nombre }}{{ $presentador->cargo ? ' - '.$presentador->cargo : '' }}
+                                </option>
                             @endforeach
                         </select>
 

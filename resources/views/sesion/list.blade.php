@@ -7,7 +7,7 @@
 
     <div class="pt-2">  {{-- <- antes py-8 --}}
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <livewire:sesion-list />
+                <livewire:sesion.listado />
         </div>
     </div>
 </x-app-layout>

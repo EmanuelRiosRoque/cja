@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Sesion;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Services\DocumentoService;
 use Illuminate\Support\Facades\Log;
 
-class SesionAdjuntarDocumento extends Component
+class Adjuntar extends Component
 {
     use WithFileUploads;
 
@@ -87,7 +87,7 @@ class SesionAdjuntarDocumento extends Component
 
     public function render()
     {
-        return view('livewire.sesion-adjuntar-documento', [
+        return view('livewire.sesion.adjuntar', [
             'temas' => $this->temas,
         ]);
     }

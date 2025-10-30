@@ -9,7 +9,7 @@
   <div class="pt-2">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-      <livewire:sesion-adjuntar-documento
+      <livewire:sesion.adjuntar
         :sesion="$sesion"
       />
     </div>
