@@ -34,7 +34,5 @@ class RolesSeeder extends Seeder
                 'guard_name' => 'web',
             ]);
         }
-
-        $this->command->info('✅ Roles creados o actualizados correctamente.');
     }
 }

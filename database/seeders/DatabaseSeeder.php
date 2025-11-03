@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PresentadoresSeeder::class,
             RolesSeeder::class,
             PonenciasSeeder::class,
+            EstatusSeeder::class,
         ]);
 
     }

@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\ListaSesionesController;
-use App\Http\Controllers\NuevaSesionController;
-use App\Livewire\Wizards\ApplicationWizard;
+use App\Http\Controllers\SesionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,13 +16,25 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::prefix('sesiones')->group(function () {
-        Route::get('/', [NuevaSesionController::class, 'list'])->name('sesion.index');        
-        Route::get('/crear', [NuevaSesionController::class, 'index'])->name('sesion.create'); 
-        Route::get('/orden-dia/{sesion}', [NuevaSesionController::class, 'ordenDia'])->name('sesion.ordenDia');
-        Route::get('/temas/{sesion}', [NuevaSesionController::class, 'temas'])->name('sesion.temas');
-        Route::get('/adjuntar/{sesion}', [NuevaSesionController::class, 'adjuntar'])->name('sesion.adjuntar');
-        Route::get('/ponencia/{sesion}', [NuevaSesionController::class, 'ponencia'])->name('sesion.ponencia');
+Route::prefix('sesiones')
+    ->as('sesion.')
+    ->controller(SesionController::class)
+    ->group(function () {
+
+        Route::get('/', 'list')->name('index');
+
+        Route::middleware(['role:SuperAdmin'])->group(function () {
+            Route::get('/crear', 'index')->name('create');
+            Route::get('/{sesion}/orden-dia', 'ordenDia')->name('ordenDia');
+            Route::get('/{sesion}/temas', 'temas')->name('temas');
+            Route::get('/{sesion}/adjuntar', 'adjuntar')->name('adjuntar');
+        });
+
+        Route::middleware(['role:Administrador'])->group(function () {
+            Route::get('/{sesion}/asignar', 'asignar')->name('asignar');
+        });
+
+        Route::get('/{sesion}/ponencia', 'ponencia')->name('ponencia');
     });
 });
 

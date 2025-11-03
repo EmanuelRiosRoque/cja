@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Presentador;
 use App\Models\Sesion;
-use Illuminate\Http\Request;
 
-class NuevaSesionController extends Controller
+class SesionController extends Controller
 {
     public function index() {
         return view('sesion.index');
@@ -43,6 +42,14 @@ class NuevaSesionController extends Controller
     public function ponencia(Sesion $sesion)
     {
         return view('sesion.ordenDia.ponencia', [
+            'sesion' => $sesion,
+        ]);
+    }
+
+
+   public function asignar(Sesion $sesion)
+    {
+        return view('sesion.ordenDia.administrador.asignar', [
             'sesion' => $sesion,
         ]);
     }

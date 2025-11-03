@@ -17,6 +17,12 @@ return new class extends Migration
             $table->foreignId('tipo_sesion_id')->constrained('tipos_sesion')->cascadeOnDelete();
             $table->foreignId('caracter_id')->constrained('caracteres_sesion')->cascadeOnDelete();
 
+            $table->foreignId('estatus_id')
+                ->default(1) 
+                ->constrained('estatus')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+
             $table->date('fecha_programada');
             $table->time('hora_programada');
             $table->time('hora_termino');

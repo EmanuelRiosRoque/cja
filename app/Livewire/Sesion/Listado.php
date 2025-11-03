@@ -19,7 +19,7 @@ class Listado extends Component
         $this->ponenciaUser = $user->ponencia?->id;
 
         // Consulta dinámica con contador de temas
-        $this->sesiones = Sesion::withCount('temas') // 👈 agrega contador de temas
+        $this->sesiones = Sesion::withCount('temas') 
             ->with(['temas.presentadores.ponencia'])
             ->when($this->ponenciaUser, function ($query) use ($user) {
                 $query->whereHas('temas.presentadores', function ($sub) use ($user) {
