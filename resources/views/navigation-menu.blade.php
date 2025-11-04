@@ -89,27 +89,19 @@
                     <li>
                         <x-nav.item href="{{ route('sesion.index') }}" route="sesion.index">
                             <x-slot:icon>
-                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                    class="w-full h-full" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    viewBox="0 0 24 24" 
-                                    aria-hidden="true">
-                                    <circle cx="12" cy="12" r="9" 
-                                        stroke-width="1.8" 
-                                        stroke-linecap="round" 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9" stroke-width="1.8" stroke-linecap="round"
                                         stroke-linejoin="round" />
-                                    <polyline points="12 7 12 12 15 15" 
-                                        stroke-width="1.8" 
-                                        stroke-linecap="round" 
+                                    <polyline points="12 7 12 12 15 15" stroke-width="1.8" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
                             </x-slot:icon>
-                                @hasrole('Administrador')
-                                    {{ __('Sesiones Programadas') }}
-                                @else
-                                    {{ __('Seguimiento a Sesiones') }}
-                                @endhasrole
+                            @hasrole('Administrador')
+                            {{ __('Sesiones Programadas') }}
+                            @else
+                            {{ __('Seguimiento a Sesiones') }}
+                            @endhasrole
                         </x-nav.item>
                     </li>
                 </ul>
@@ -175,15 +167,11 @@
     </aside>
 
     {{-- Botón para mostrar cuando está oculto --}}
-   <button
-  x-cloak
-  x-show="!open && collapsed"
-  @click="collapsed = false"
-  class="sm:flex fixed top-3 left-3 z-[60] p-2.5 rounded-xl bg-white border border-gray-200 shadow-md hover:bg-gray-50 active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
-  aria-label="Mostrar sidebar" title="Mostrar sidebar"
->
-  <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5l7 7-7 7" />
-  </svg>
-</button>
+    <button x-cloak x-show="!open && collapsed" @click="collapsed = false"
+        class="sm:flex fixed top-3 left-3 z-[60] p-2.5 rounded-xl bg-white border border-gray-200 shadow-md hover:bg-gray-50 active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
+        aria-label="Mostrar sidebar" title="Mostrar sidebar">
+        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5l7 7-7 7" />
+        </svg>
+    </button>
 </div>
