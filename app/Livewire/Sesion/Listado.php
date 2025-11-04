@@ -14,14 +14,18 @@ class Listado extends Component
     public function mount()
     {
         $user = Auth::user();
-
-        // Evita error si no tiene ponencia
         $this->ponenciaUser = $user->ponencia?->id;
 
-        // Consulta dinámica con contador de temas
-        $this->sesiones = Sesion::withCount('temas') 
+        $this->sesiones = Sesion::withCount('temas')
             ->with(['temas.presentadores.ponencia'])
-            ->when($this->ponenciaUser, function ($query) use ($user) {
+            ->when($user->hasRole('Integrador'), function ($query) use ($user) {
+                // 🔹 Si el usuario es Integrador → solo mostrar sesiones con temas asignados a él
+                $query->whereHas('temas.asignaciones', function ($sub) use ($user) {
+                    $sub->where('user_id', $user->id);
+                });
+            })
+            ->when(!$user->hasRole('Integrador') && $this->ponenciaUser, function ($query) use ($user) {
+                // 🔹 Si NO es integrador pero tiene ponencia → mostrar sesiones por su ponencia
                 $query->whereHas('temas.presentadores', function ($sub) use ($user) {
                     $sub->where('ponencia_id', $user->ponencia_id);
                 });

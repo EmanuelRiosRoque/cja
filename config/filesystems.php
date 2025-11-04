@@ -47,6 +47,11 @@ return [
             'report' => false,
         ],
 
+        'externo' => [
+            'driver' => 'local',
+            'root' => env('ALMACENAMIENTO_EXTERNO', 'C:\\Users\\emanu\\Desktop\\Gestor'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -47,7 +47,7 @@
       <section class="min-h-[100svh] bg-gray-50">
         <main class="sm:ml-[var(--sbw,18rem)] min-h-full overflow-y-auto">
           <div class="pt-0 pb-8 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-7xl mx-auto [&>*:first-child]:mt-0">
+            <div class="w-full mx-auto [&>*:first-child]:mt-0">
               {{ $slot }}
             </div>
           </div>

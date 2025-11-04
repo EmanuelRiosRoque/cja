@@ -25,15 +25,20 @@
                                 type="checkbox" 
                                 wire:model="selectAll"
                                 class="text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 focus:border-emerald-500"
+                                {{ $todosAsignados ? 'disabled' : '' }}
                             >
                         </th>
                         <th class="p-2 border">No.</th>
                         <th class="p-2 border">Tema</th>
                         <th class="p-2 border">Prioridad</th>
+                        <th class="p-2 border">¿Asignado?</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($temas as $tema)
+                        @php
+                            $asignado = $tema->estatus_id == 2;
+                        @endphp
                         <tr class="{{ in_array($tema->id, $temasSeleccionados) ? 'bg-emerald-50' : '' }}">
                             <td class="p-2 border text-center">
                                 <input 
@@ -41,6 +46,7 @@
                                     wire:model="temasSeleccionados" 
                                     value="{{ $tema->id }}"
                                     class="text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 focus:border-emerald-500"
+                                    {{ $asignado ? 'disabled' : '' }}
                                 >
                             </td>
                             <td class="p-2 border text-center">{{ $tema->numero_tema }}</td>
@@ -54,6 +60,11 @@
                                     ][$tema->prioridad] ?? 'Sin asignar';
                                 @endphp
                                 {{ $prioridad }}
+                            </td>
+                            <td class="p-2 border text-center">
+                                <span class="{{ $asignado ? 'text-green-600 font-semibold' : 'text-gray-600' }}">
+                                    {{ $tema->estatus->nombre }}
+                                </span>
                             </td>
                         </tr>
                     @empty
@@ -75,22 +86,29 @@
                         wire:model="usuarioId"
                         class="mt-1 w-full border-gray-300 rounded-lg shadow-sm 
                                focus:ring-emerald-500 focus:border-emerald-500"
+                        {{ $todosAsignados ? 'disabled' : '' }}
                     >
                         <option value="">-- Selecciona --</option>
                         @foreach ($usuarios as $usuario)
                             <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
                         @endforeach
                     </select>
-                    @error('usuarioId')
-                        <span class="text-sm text-red-600">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <div class="flex gap-3 justify-end">
-                    <x-button type="button" wire:click="$set('temasSeleccionados', [])" variant="secondary">
+                    <x-button 
+                        type="button" 
+                        wire:click="$set('temasSeleccionados', [])" 
+                        variant="secondary"
+                        :disabled="$todosAsignados"
+                    >
                         Limpiar selección
                     </x-button>
-                    <x-button type="submit">
+
+                    <x-button 
+                        type="submit" 
+                        :disabled="$todosAsignados"
+                    >
                         Asignar temas
                     </x-button>
                 </div>

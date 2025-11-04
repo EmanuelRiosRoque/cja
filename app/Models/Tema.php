@@ -14,6 +14,7 @@ class Tema extends Model
         'descripcion',
         'prioridad',
         'es_asunto_adicional',
+        'estatus_id',
     ];
 
     public function sesion()
@@ -42,4 +43,10 @@ class Tema extends Model
     {
         return $this->presentadores()->count() > 1;
     }
+
+    public function asignaciones()
+{
+    return $this->hasMany(\App\Models\TemaAsignado::class, 'tema_id');
+}
+
 }

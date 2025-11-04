@@ -12,13 +12,13 @@ class Dropzone extends Component
     use WithFileUploads;
 
     #[Modelable]
-    public ?array $files = []; // Eliminamos ?array → más rápido, evita errores de tipado
+    public ?array $files = [];
 
-    public array $uploads = []; // Archivos temporales
+    public array $uploads = [];
 
     // Configuración
-    public string $disk = 'public';
-    public string $directory = 'attachments';
+    public string $disk = 'externo'; // ← tu disco externo
+    public string $directory = '';   // ← vacío para guardar directo en raíz
     public string $accept = '.pdf,.jpg,.jpeg,.png';
     public int $maxSizeKB = 10240;
     public bool $multiple = true;
@@ -32,52 +32,69 @@ class Dropzone extends Component
         ];
     }
 
-    /**
-     * Se ejecuta automáticamente al subir archivos.
-     */
     public function updatedUploads(): void
     {
         $this->validateOnly('uploads');
 
-        // Guardamos en bloque, minimizando I/O
         foreach ($this->uploads as $file) {
-            // Se guarda directamente en el disco configurado
-            $storedPath = $file->store($this->directory, $this->disk);
+            // Crear nombre único base
+            $uniqueId = uniqid();
+            $originalName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
 
-            // Añadimos metadatos mínimos
+            // Guardar archivo directamente en la raíz del disco externo
+            $storedPath = $file->storeAs(
+                '', // sin carpeta
+                "{$uniqueId}_{$originalName}",
+                $this->disk
+            );
+
+            // Si es PDF, generar su XML automáticamente
+            if (strtolower($extension) === 'pdf') {
+                $tipo = strtoupper($extension);
+                $fecha = now()->format('Y-m-d H:i:s');
+
+                $xml = '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL .
+                    '<doc>' . PHP_EOL .
+                    '   <metadata name="TipoArchivo">' . $tipo . '</metadata>' . PHP_EOL .
+                    '   <metadata name="n_documento">' . "{$uniqueId}_{$originalName}" . '</metadata>' . PHP_EOL .
+                    '   <metadata name="fecha_documento">' . $fecha . '</metadata>' . PHP_EOL .
+                    '</doc>';
+
+                // Guardar XML junto al PDF
+                $xmlName = pathinfo($originalName, PATHINFO_FILENAME);
+                $xmlName = "{$uniqueId}_{$xmlName}.xml";
+
+                Storage::disk($this->disk)->put($xmlName, $xml);
+            }
+
+            // Registrar en array de archivos
             $this->files[] = [
-                'path' => "storage/{$storedPath}",
+                'path' => Storage::disk($this->disk)->path($storedPath),
                 'name' => $file->getClientOriginalName(),
                 'size' => $file->getSize(),
                 'mime' => $file->getMimeType(),
             ];
         }
 
-        // Liberamos memoria temporal
+        // Limpiar cargas temporales
         $this->reset('uploads');
     }
 
-    /**
-     * Elimina un archivo del array y del disco (si existe).
-     */
     public function remove(int $index): void
     {
         $file = $this->files[$index] ?? null;
         if (!$file) return;
 
-        // Convertir a ruta relativa del disco (quitar "storage/")
-        $relative = str_starts_with($file['path'], 'storage/')
-            ? substr($file['path'], 8)
-            : $file['path'];
+        $relative = basename($file['path']); // nombre del archivo
 
-        // Eliminar si existe físicamente
+        // Eliminar archivo físico si existe
         if (Storage::disk($this->disk)->exists($relative)) {
             Storage::disk($this->disk)->delete($relative);
         }
 
-        // Quitar del array sin reindexar manualmente
         unset($this->files[$index]);
-        $this->files = array_values($this->files); // normaliza índices
+        $this->files = array_values($this->files);
     }
 
     public function render()

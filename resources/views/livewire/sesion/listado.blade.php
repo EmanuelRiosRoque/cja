@@ -62,7 +62,7 @@
                                             </div>
                                         @endrole
 
-                                        @role('Cordinador')
+                                        @role('Coordinador')
                                             <div class="flex item-center justify-center">
                                                 <a href="{{ route('sesion.asignar', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -71,6 +71,22 @@
                                                             d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             d="M4.5 20.25a8.25 8.25 0 0 1 15 0M17 13l2 2 4-4" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        @endrole
+                                        @role('Integrador')
+                                            <div class="flex item-center justify-center">
+                                                <a href="{{ route('sesion.asignar', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
+                                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                                        fill="none" stroke="currentColor" stroke-width="1.6" 
+                                                        stroke-linecap="round" stroke-linejoin="round" 
+                                                        class="w-5 h-5">
+                                                    <!-- Documento -->
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                    <path d="M14 2v6h6"/>
+                                                    <!-- Lápiz -->
+                                                    <path d="M16.5 14.5l3 3L17 20h-3v-3l2.5-2.5z"/>
                                                     </svg>
                                                 </a>
                                             </div>

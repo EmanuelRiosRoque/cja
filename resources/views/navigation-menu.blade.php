@@ -68,7 +68,65 @@
                             {{ __('Dashboard') }}
                         </x-nav.item>
                     </li>
+    <li>
+        <x-nav.item href="{{ route('oficialia.registro') }}" route="oficialia.registro">
+            <x-slot:icon>
+                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+            </x-slot:icon>
+            {{ __('Registro de documento') }}
+        </x-nav.item>
+    </li>
 
+    <li>
+        <x-nav.item href="{{ route('oficialia.turnos') }}" route="oficialia.turnos">
+            <x-slot:icon>
+                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+            </x-slot:icon>
+                                {{ __('Administración de turnos') }}
+        </x-nav.item>
+    </li>
+
+
+
+                
+
+                        <li>
+                            <x-nav.item href="{{ route('sesion.create') }}" route="sesion.create">
+                                <x-slot:icon>
+                                    <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                                        <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                    </svg>
+                                </x-slot:icon>
+                                {{ __('Reportes') }}
+                            </x-nav.item>
+                        </li>
+                    {{-- Ocultar todo este bloque si el rol es "Oficialía" --}}
+                    @unlessrole('Oficialía')
+
+                    {{-- Dashboard --}}
+
+
+                    {{-- Programar sesión --}}
                     <li>
                         <x-nav.item href="{{ route('sesion.create') }}" route="sesion.create">
                             <x-slot:icon>
@@ -86,6 +144,7 @@
                         </x-nav.item>
                     </li>
 
+                    {{-- Sesiones programadas / seguimiento --}}
                     <li>
                         <x-nav.item href="{{ route('sesion.index') }}" route="sesion.index">
                             <x-slot:icon>
@@ -104,7 +163,12 @@
                             @endhasrole
                         </x-nav.item>
                     </li>
+
+                    @endunlessrole
+
+
                 </ul>
+
 
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                 <div class="mt-6">
