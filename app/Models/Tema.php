@@ -21,6 +21,11 @@ class Tema extends Model
         return $this->belongsTo(Sesion::class);
     }
 
+    public function estatus()
+    {
+        return $this->belongsTo(Estatus::class);
+    }
+
     public function documentos()
     {
         return $this->hasMany(Documento::class, 'tema_id');

@@ -7,11 +7,13 @@ use App\Models\Sesion;
 
 class SesionController extends Controller
 {
-    public function index() {
+    public function index() 
+    {
         return view('sesion.index');
     }
 
-    public function list() {
+    public function list() 
+    {
         return view('sesion.list');
     }
 
@@ -46,10 +48,18 @@ class SesionController extends Controller
         ]);
     }
 
-
-   public function asignar(Sesion $sesion)
+    // VIEWS PARA ADMINISTRADOR
+    public function monitor(Sesion $sesion)
     {
-        return view('sesion.ordenDia.administrador.asignar', [
+        return view('sesion.ordenDia.administrador.monitor', [
+            'sesion' => $sesion,
+        ]);
+    }
+
+    // VIEWS PARA CORDINADOR
+    public function asignar(Sesion $sesion)
+    {
+        return view('sesion.ordenDia.coordinador.asignar', [
             'sesion' => $sesion,
         ]);
     }

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class Formulario extends Component
 {
     // ===== CAMPOS =====
-    public string $forma_captura = 'programada';
+    public $forma_captura = 1;
     public ?string $sede = null;
     public ?string $tipo_sesion = null;
     public ?string $caracter = null;
@@ -48,7 +48,7 @@ class Formulario extends Component
     protected function rules(): array
     {
         return [
-            'forma_captura'    => ['required', Rule::in(['programada', 'referida'])],
+            'forma_captura'    => ['required'],
             'sede'             => ['required'],
             'tipo_sesion'      => ['required'],
             'caracter'         => ['required'],

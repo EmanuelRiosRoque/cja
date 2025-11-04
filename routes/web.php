@@ -31,6 +31,10 @@ Route::prefix('sesiones')
         });
 
         Route::middleware(['role:Administrador'])->group(function () {
+            Route::get('/{sesion}/monitor', 'monitor')->name('monitor');
+        });
+
+        Route::middleware(['role:Coordinador'])->group(function () {
             Route::get('/{sesion}/asignar', 'asignar')->name('asignar');
         });
 

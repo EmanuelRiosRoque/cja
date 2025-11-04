@@ -8,7 +8,7 @@
   <div class="min-h-screen overflow-y-auto">
   <div class="pt-2">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <livewire:sesion.administrador.asignar :sesion="$sesion" />
+        <livewire:sesion.coordinador.asignar :sesion="$sesion" />
     </div>
   </div>
 </div>

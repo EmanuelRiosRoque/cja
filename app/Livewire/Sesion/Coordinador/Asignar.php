@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Sesion\Administrador;
+namespace App\Livewire\Sesion\Coordinador;
 
 use Livewire\Component;
 use App\Models\User;
@@ -81,7 +81,7 @@ class Asignar extends Component
                 ->get();
         }
 
-        return view('livewire.sesion.administrador.asignar', [
+        return view('livewire.sesion.coordinador.asignar', [
             'usuarios' => $usuarios,
         ]);
     }

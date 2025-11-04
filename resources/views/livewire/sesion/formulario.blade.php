@@ -1,5 +1,5 @@
 <div 
-    x-data="{ forma: 'programada' }"
+    x-data="{ forma: '1' }"
     x-init="$watch('forma', value => $wire.set('forma_captura', value))"
     class="py-10"
 >
@@ -22,12 +22,12 @@
       @include('sesion.includes.opciones')
 
       {{-- ======= Bloque: Referida ======= --}}
-      <div x-show="forma === 'referida'"  x-cloak>
+      <div x-show="forma === '2'"  x-cloak>
         @include('sesion.includes.referidos')
       </div>
 
       {{-- ======= Bloque: Programada ======= --}}
-      <div x-show="forma === 'programada'"  x-cloak>
+      <div x-show="forma === '1'"  x-cloak>
         @include('sesion.includes.programada')
       </div>
 

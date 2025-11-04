@@ -156,7 +156,8 @@
                 </div>
                 <div class="mt-3 grid gap-1">
                     <x-dropdown-link class="!px-3 !py-2 rounded-md hover:bg-gray-50" href="{{ route('profile.show') }}">
-                        Profile</x-dropdown-link>
+                        Perfil
+                    </x-dropdown-link>
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <x-dropdown-link class="!px-3 !py-2 rounded-md hover:bg-gray-50"
                         href="{{ route('api-tokens.index') }}">API Tokens</x-dropdown-link>
@@ -164,7 +165,9 @@
                     <form method="POST" action="{{ route('logout') }}" x-data class="mt-1">
                         @csrf
                         <x-dropdown-link class="!px-3 !py-2 rounded-md hover:bg-gray-50" href="{{ route('logout') }}"
-                            @click.prevent="$root.submit();">Log Out</x-dropdown-link>
+                            @click.prevent="$root.submit();">
+                            Cerrar Sesión
+                        </x-dropdown-link>
                     </form>
                 </div>
             </div>

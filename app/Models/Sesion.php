@@ -27,6 +27,11 @@ class Sesion extends Model
         return $this->belongsTo(Sede::class);
     }
 
+    public function estatus()
+    {
+        return $this->belongsTo(Estatus::class);
+    }
+
     public function tipoSesion()
     {
         return $this->belongsTo(TipoSesion::class);

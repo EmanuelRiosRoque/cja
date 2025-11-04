@@ -11,17 +11,26 @@ return new class extends Migration
         Schema::create('temas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sesion_id');
-            
+
+            $table->foreignId('estatus_id')
+                ->default(1) 
+                ->constrained('estatus')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+
             $table->integer('numero_tema');
             $table->text('descripcion');
             $table->integer('prioridad')->default(1);
             $table->boolean('es_asunto_adicional')->default(false);
             $table->timestamps();
 
+            // Relaciones
             $table->foreign('sesion_id')
                 ->references('id')
                 ->on('sesiones')
                 ->onDelete('cascade');
+
+
         });
     }
 

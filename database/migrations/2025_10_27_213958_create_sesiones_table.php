@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('sesiones', function (Blueprint $table) {
             $table->id();
             $table->string('folio', 10)->nullable()->unique();
-            $table->string('forma_captura');           
+            $table->integer('forma_captura');           
 
             $table->foreignId('sede_id')->constrained('sedes')->cascadeOnDelete();
             $table->foreignId('tipo_sesion_id')->constrained('tipos_sesion')->cascadeOnDelete();
