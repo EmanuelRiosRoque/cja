@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Catalogos\CatCaracterSesion;
+use App\Models\Catalogos\CatEstatus;
+use App\Models\Catalogos\CatSede;
+use App\Models\Catalogos\CatTipoSesion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,22 +28,22 @@ class Sesion extends Model
 
     public function sede()
     {
-        return $this->belongsTo(Sede::class);
+        return $this->belongsTo(CatSede::class);
     }
 
     public function estatus()
     {
-        return $this->belongsTo(Estatus::class);
+        return $this->belongsTo(CatEstatus::class);
     }
 
     public function tipoSesion()
     {
-        return $this->belongsTo(TipoSesion::class);
+        return $this->belongsTo(CatTipoSesion::class);
     }
 
     public function caracter()
     {
-        return $this->belongsTo(CaracterSesion::class);
+        return $this->belongsTo(CatCaracterSesion::class);
     }
 
     public function temas()

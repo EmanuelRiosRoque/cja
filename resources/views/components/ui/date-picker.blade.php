@@ -233,12 +233,15 @@ document.addEventListener('alpine:init', () => {
       this.display = iso ? this.formatDisplay(iso) : '';
 
       this.$watch('value', (v) => {
-        if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
-          this.display = this.formatDisplay(v);
-        } else if (!v) {
-          this.display = '';
-        }
+      if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+        // Si Livewire actualiza el valor con una fecha válida
+        this.display = this.formatDisplay(v);
+          } else if (!v || v === null || v === '') {
+              this.value = null;
+              this.display = '';
+          }
       });
+
     },
 
     // Abrir / cerrar

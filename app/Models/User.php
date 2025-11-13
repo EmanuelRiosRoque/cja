@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Catalogos\CatAdminJudicial;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +23,9 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
+    
+    public $timestamps = false; //  evita que se inserten created_at y updated_at
+
     /**
      * The attributes that are mass assignable.
      *
@@ -68,7 +73,7 @@ class User extends Authenticatable
     }
 
     
-    public function ponencia() {
-        return $this->belongsTo(Ponencia::class);
+    public function adminJudicial() {
+        return $this->belongsTo(CatAdminJudicial::class);
     }
 }

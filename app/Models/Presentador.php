@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Catalogos\CatAdminJudicial;
 use Illuminate\Database\Eloquent\Model;
 
 class Presentador extends Model
 {
     protected $table = 'presentadores';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',
@@ -27,8 +30,8 @@ class Presentador extends Model
             : $this->nombre;
     }
 
-    public function ponencia() {
-        return $this->belongsTo(Ponencia::class);
+    public function adminJudicial() {
+        return $this->belongsTo(CatAdminJudicial::class);
     }
 
 }

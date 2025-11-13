@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Catalogos;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class RolesSeeder extends Seeder
+class CatRolesSeeder extends Seeder
 {
     public function run(): void
     {

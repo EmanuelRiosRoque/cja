@@ -14,13 +14,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // 🏠 Dashboard
+    // Dashboard
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
     // ===========================
-    // 📅 SESIONES
+    // SESIONES (PLENO)
     // ===========================
     Route::prefix('sesiones')
         ->as('sesion.')
@@ -48,7 +48,7 @@ Route::middleware([
         });
 
     // ===========================
-    // 📨 OFICIALÍA
+    // OFICIALÍA
     // ===========================
     Route::prefix('oficialia')
         ->as('oficialia.')
@@ -58,7 +58,7 @@ Route::middleware([
             Route::middleware('role:Oficialía')->group(function () {
                 Route::get('/registro', 'registroDocumento')->name('registro');
                 Route::get('/turnos', 'turnos')->name('turnos');
-                
+                Route::get('/reportes', 'reportes')->name('reportes');
             });
         });
 });

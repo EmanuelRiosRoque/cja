@@ -105,7 +105,7 @@
                 
 
                         <li>
-                            <x-nav.item href="{{ route('sesion.create') }}" route="sesion.create">
+                            <x-nav.item href="{{ route('oficialia.reportes') }}" route="oficialia.reportes">
                                 <x-slot:icon>
                                     <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         aria-hidden="true">

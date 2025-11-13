@@ -1,336 +1,175 @@
 <div class="overflow-x-auto p-6 bg-gray-50 rounded-lg w-full max-w-none">
 
-    {{-- 🔹 FILTROS DE BÚSQUEDA --}}
-    <div class="grid grid-cols-4 gap-4 mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-        <div>
-            <x-ui.date-picker label="Fecha de recepción" wire:model="fecha_recepcion" :disable-past="true" />
-        </div>
-
-        <div>
-            <x-label for="tipo_entrega" value="Entrega Física / Virtual" />
-            <select id="tipo_entrega" wire:model="tipo_entrega"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                <option value="">-- Selecciona --</option>
-                <option value="1">OPF</option>
-                <option value="2">SICAPOAJ</option>
-            </select>
-        </div>
-
-        <div>
-            <x-label for="tipo_procedencia" value="Tipo de procedencia" />
-            <select id="tipo_procedencia" wire:model="tipo_procedencia"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                <option value="">-- Selecciona --</option>
-                <option value="1">Interno</option>
-                <option value="2">Externo</option>
-                <option value="3">Particular</option>
-            </select>
-        </div>
-
-        <div>
-            <x-label for="area_procedencia" value="Área de procedencia" />
-            <select id="area_procedencia" wire:model="area_procedencia"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                <option value="">-- Selecciona --</option>
-                <option value="1">Área 1</option>
-                <option value="2">Área 2</option>
-                <option value="3">Área 3</option>
-            </select>
-        </div>
-
-        <div>
-            <x-label for="turno" value="Turno" />
-            <select id="turno" wire:model="turno"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                <option value="">-- Selecciona --</option>
-                <option value="1">Pleno</option>
-                <option value="2">Seguimiento</option>
-                <option value="3">Amparo</option>
-                <option value="4">Varios</option>
-            </select>
-        </div>
-
-        <div>
-            <x-label for="no_oficio" value="Número de oficio" />
-            <x-input id="no_oficio" type="text" wire:model="no_oficio"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500" />
-        </div>
-
-        <div>
-            <x-label for="promovente" value="Promovente" />
-            <x-input id="promovente" type="text" wire:model="promovente"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500" />
-        </div>
-
-        <div>
-            <x-label for="tipo" value="Tipo" />
-            <select id="tipo" wire:model="tipo"
-                class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                <option value="">-- Selecciona --</option>
-                <option value="1">Original</option>
-                <option value="2">Copia</option>
-            </select>
-        </div>
-
-        <div class="flex items-end gap-2">
-            <x-button wire:click="limpiarFiltros" variant="secondary">LIMPIAR</x-button>
-            <x-button wire:click="buscarRegistros" variant="primary">BUSCAR</x-button>
-        </div>
-    </div>
-
-    {{-- 🔹 TABLA --}}
+    @include('livewire.oficialia.includes.filtro')
+    {{-- TABLA --}}
     <div class="bg-white shadow-md rounded border border-gray-300">
-        <table class="w-full border-collapse text-sm">
+
+        <table class="w-full table-auto">
             <thead>
-                <tr class="bg-gray-100 text-gray-700 uppercase text-xs border-b border-gray-300">
-                    <th class="py-3 px-4 border-r border-gray-300">Área de procedencia</th>
-                    <th class="py-3 px-4 border-r border-gray-300">Promovente</th>
-                    <th class="py-3 px-4 border-r border-gray-300">Tipo de procedencia</th>
-                    <th class="py-3 px-4 border-r border-gray-300">Turno</th>
-                    <th class="py-3 px-4 border-r border-gray-300 text-center">Anexos</th>
-                    <th class="py-3 px-4 border-r border-gray-300 text-center">Fecha recepción</th>
-                    <th class="py-3 px-4 border-r border-gray-300 text-center">Clasificación</th>
-                    <th class="py-3 px-4 border-r border-gray-300 text-center">Tipo</th>
-                    <th class="py-3 px-4 border-r border-gray-300 text-center">Documento</th>
-                    <th class="py-3 px-4 text-center">Acciones</th>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">Área de procedencia</th>
+                    <th class="py-3 px-6 text-left">Promovente</th>
+                    <th class="py-3 px-6 text-center">Tipo de procedencia</th>
+                    <th class="py-3 px-6 text-center">Turno</th>
+                    <th class="py-3 px-6 text-center">Anexos</th>
+                    <th class="py-3 px-6 text-center">Fecha recepción</th>
+                    <th class="py-3 px-6 text-center">Clasificación</th>
+                    <th class="py-3 px-6 text-center">Tipo</th>
+                    <th class="py-3 px-6 text-center">Documento</th>
+                    <th class="py-3 px-6 text-center">Acciones</th>
                 </tr>
             </thead>
-            <tbody class="text-gray-700">
-                @for ($i = 1; $i <= 10; $i++)
-                    <tr class="border-b border-gray-200 hover:bg-gray-50">
-                        <td class="py-2 px-4 border-r border-gray-200">Área Jurídica {{ $i }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200">Juan Pérez {{ $i }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">Interno</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">#{{ 100 + $i }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">{{ rand(0,1) ? 'Sí' : 'No' }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">{{ now()->subDays(rand(1,30))->format('d/m/Y') }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">Oficio</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">{{ rand(1,2) === 1 ? 'Original' : 'Copia' }}</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">
-                            <button class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded shadow">
-                                VER DOCUMENTO
-                            </button>
-                        </td>
-                        <td class="py-2 px-4 text-center w-96">
-                            <div class="flex flex-wrap justify-center gap-1">
-                               <button
-                                    wire:click="abrirModalEditarRegistro"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm transition">
-                                    EDITAR REGISTRO
-                                </button>
 
-                               <button
-                                    wire:click="abrirModalEditarTurno"
-                                    class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm transition">
-                                    EDITAR TURNO
-                                </button>
+            <tbody class="text-gray-600 text-sm font-light">
+                @for ($i = 1; $i <= 10; $i++) <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap">
+                        Área Jurídica {{ $i }}
+                    </td>
+                    <td class="py-3 px-6 text-left">
+                        Juan Pérez {{ $i }}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        Interno
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        #{{ 100 + $i }}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        {{ rand(0,1) ? 'Sí' : 'No' }}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        {{ now()->subDays(rand(1,30))->format('d/m/Y') }}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        Oficio
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        {{ rand(1,2) === 1 ? 'Original' : 'Copia' }}
+                    </td>
 
+                    {{-- Documento --}}
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
+                            <a wire:click='abrirModalEditarTurno'
+                                class="w-4 mr-2 transform hover:text-red-500 hover:scale-110"
+                                    title="Ver documento">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 15c1.5-3 3.5-6 6-9m0 9c-1.5-1-3-1.5-4.5-1.5m4.5 1.5c.5-.5 1.5-1.5 2-2.5" />
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
 
-                                <button wire:click="abrirModalCancelar"
-                                    class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm transition">
-                                    CANCELAR
-                                </button>
+                    {{-- Acciones --}}
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
 
-                            </div>
-                        </td>
+                            <a href="{{ route('oficialia.registro') }}"
+                                class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110"
+                                    title="Editar registro">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4h16v16H4V4z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 12h8M8 8h8M8 16h3m2 3l4 4m0 0l4-4m-4 4V9" />
+                                </svg>
+                            </a>
+
+                            <a wire:click='abrirModalEditarTurno'
+                                class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
+                                    title="Editar turno">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L8 18l-4 1 1-4 11.5-11.5z" />
+                                </svg>
+                            </a>
+
+                            <a wire:click='abrirModalCancelar'
+                                class="w-4 mr-2 transform hover:text-red-500 hover:scale-110"
+                                    title="Cancelar">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 11v6M14 11v6" />
+                                </svg>
+                            </a>
+
+                        </div>
+                    </td>
                     </tr>
-                @endfor
+                    @endfor
             </tbody>
         </table>
+
     </div>
 
-    {{-- MODAL DE CONFIRMACIÓN --}}
-   {{-- 🔹 MODAL CANCELAR --}}
-<x-dialog-modal wire:model="modalCancelar">
-    <x-slot name="title">
-        Modal Cancelar
-    </x-slot>
-
-    <x-slot name="content">
-        <p class="text-gray-700 text-base">
-            ¿Está seguro de que desea <span class="font-semibold text-red-600">CANCELAR</span> el registro seleccionado?
-        </p>
-    </x-slot>
-
-    <x-slot name="footer">
-        <div class="flex justify-end gap-3">
-            <x-button
-                wire:click="$set('modalCancelar', false)"
-                variant="danger"
-                >
-                Cancelar
-            </x-button>
-
-            <x-button
-                wire:click="confirmarCancelar"
-                variant="primary"
-            >
-                Confirmar
-            </x-button>
-        </div>
-    </x-slot>
-</x-dialog-modal>
 
 
-<x-dialog-modal wire:model="modalEditarRegistro" maxWidth="2xl">
-    <x-slot name="title">
-        Modal Editar Registro
-    </x-slot>
+    <x-dialog-modal wire:model="modalCancelar">
+        <x-slot name="title">
+            Modal Cancelar
+        </x-slot>
 
-    <x-slot name="content">
-        <div class="grid grid-cols-3 gap-4 mb-4">
-            <div>
-                <x-label value="Tipo de procedencia:" />
-                <select wire:model="tipo_procedencia"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Interno</option>
-                    <option value="2">Externo</option>
-                    <option value="3">Particular</option>
-                </select>
+        <x-slot name="content">
+            <p class="text-gray-700 text-base">
+                ¿Está seguro de que desea <span class="font-semibold text-red-600">CANCELAR</span> el registro
+                seleccionado?
+            </p>
+        </x-slot>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-3">
+                <x-button wire:click="$set('modalCancelar', false)" variant="danger">
+                    Cancelar
+                </x-button>
+
+                <x-button wire:click="confirmarCancelar" variant="primary">
+                    Confirmar
+                </x-button>
             </div>
+        </x-slot>
+    </x-dialog-modal>
 
-            <div>
-                <x-label value="Área de procedencia:" />
-                <select wire:model="area_procedencia"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Área 1</option>
-                    <option value="2">Área 2</option>
-                    <option value="3">Área 3</option>
-                </select>
+ 
+
+    <x-dialog-modal wire:model="modalEditarTurno" maxWidth="md">
+        <x-slot name="title">
+            Modal Editar Turno
+        </x-slot>
+
+        <x-slot name="content">
+            <p class="text-gray-700 text-base mb-4">
+                Por favor seleccione a qué área se turnará el registro seleccionado
+            </p>
+
+            <select wire:model="turnoSeleccionado"
+                class="w-full border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
+                <option value="">-- Selecciona el área --</option>
+                <option value="pleno">Pleno</option>
+                <option value="seguimiento">Seguimiento</option>
+                <option value="amparo">Amparo</option>
+                <option value="varios">Varios</option>
+            </select>
+        </x-slot>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-3">
+                <x-button wire:click="$set('modalEditarTurno', false)" variant="danger">
+                    Cancelar
+                </x-button>
+
+                <x-button wire:click="confirmarEditarTurno" variant="primary">
+                    Editar turno
+                </x-button>
             </div>
-
-            <div>
-                <x-label value="Entrega física/virtual:" />
-                <select wire:model="entrega"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Física</option>
-                    <option value="2">Virtual</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 mb-4">
-            <div>
-                <x-label value="No. de oficio:" />
-                <x-input type="text" wire:model="no_oficio"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
-            </div>
-
-            <div>
-                <x-label value="Promovente:" />
-                <x-input type="text" wire:model="promovente"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
-            </div>
-
-            <div>
-                <x-label value="Tipo:" />
-                <select wire:model="tipo"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Original</option>
-                    <option value="2">Copia</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 mb-4">
-            <div>
-                <x-label value="Turno:" />
-                <select wire:model="turno"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Pleno</option>
-                    <option value="2">Seguimiento</option>
-                    <option value="3">Amparo</option>
-                    <option value="4">Varios</option>
-                </select>
-            </div>
-
-            <div>
-                <x-label value="Anexos:" />
-                <select wire:model="anexos"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-                    <option value="">-- Selecciona --</option>
-                    <option value="1">Sí</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <x-label value="Descripción (síntesis):" />
-                <x-input type="text" wire:model="descripcion"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
-            </div>
-
-            <div>
-                <x-label value="Descripción anexos:" />
-                <x-input type="text" wire:model="descripcion_anexos"
-                    class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
-            </div>
-        </div>
-    </x-slot>
-
-    <x-slot name="footer">
-        <div class="flex justify-end gap-3">
-            <x-button
-                wire:click="$set('modalEditarRegistro', false)"
-                variant="danger"   
-            >
-                Cancelar
-            </x-button>
-
-            <x-button
-                wire:click="confirmarEditarRegistro"
-                variant="primary"   
-                >
-                Editar registro
-            </x-button>
-        </div>
-    </x-slot>
-</x-dialog-modal>
-
-
-<x-dialog-modal wire:model="modalEditarTurno" maxWidth="md">
-    <x-slot name="title">
-        Modal Editar Turno
-    </x-slot>
-
-    <x-slot name="content">
-        <p class="text-gray-700 text-base mb-4">
-            Por favor seleccione a qué área se turnará el registro seleccionado
-        </p>
-
-        <select wire:model="turnoSeleccionado"
-            class="w-full border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
-            <option value="">-- Selecciona el área --</option>
-            <option value="pleno">Pleno</option>
-            <option value="seguimiento">Seguimiento</option>
-            <option value="amparo">Amparo</option>
-            <option value="varios">Varios</option>
-        </select>
-    </x-slot>
-
-    <x-slot name="footer">
-        <div class="flex justify-end gap-3">
-            <x-button
-                wire:click="$set('modalEditarTurno', false)"
-                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md">
-                Cancelar
-            </x-button>
-
-            <x-button
-                wire:click="confirmarEditarTurno"
-                class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-md">
-                Editar turno
-            </x-button>
-        </div>
-    </x-slot>
-</x-dialog-modal>
-
-
+        </x-slot>
+    </x-dialog-modal>
 </div>

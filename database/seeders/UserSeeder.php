@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'email' => 'dev@example.com',
                 'num_empleado' => '8009933',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => null,
+                'adminJud' => null,
                 'rol' => 'SuperAdmin',
             ],
 
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'num_empleado' => '8001000',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => null,
+                'adminJud' => null,
                 'rol' => 'Admin',
             ],
 
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
                 'email' => 'secretaria@example.com',
                 'num_empleado' => '9001001',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 1,
+                'adminJud' => null,
                 'rol' => 'Oficialía',
             ],
 
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
                 'email' => 'ponencia1@example.com',
                 'num_empleado' => '9002001',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 2,
+                'adminJud' => null,
                 'rol' => 'Administrador',
             ],
             [
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
                 'email' => 'ponencia2@example.com',
                 'num_empleado' => '9002002',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 3,
+                'adminJud' => null,
                 'rol' => 'Administrador',
             ],
             [
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
                 'email' => 'ponencia3@example.com',
                 'num_empleado' => '9002003',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 4,
+                'adminJud' => null,
                 'rol' => 'Administrador',
             ],
             [
@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
                 'email' => 'ponencia4@example.com',
                 'num_empleado' => '9002004',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 5,
+                'adminJud' => null,
                 'rol' => 'Administrador',
             ],
             [
@@ -80,7 +80,7 @@ class UserSeeder extends Seeder
                 'email' => 'ponencia5@example.com',
                 'num_empleado' => '9002005',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => 6,
+                'adminJud' => null,
                 'rol' => 'Administrador',
             ],
 
@@ -90,7 +90,7 @@ class UserSeeder extends Seeder
                 'email' => 'coordinador@example.com',
                 'num_empleado' => '9101001',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => null,
+                'adminJud' => null,
                 'rol' => 'Coordinador',
             ],
             [
@@ -98,8 +98,17 @@ class UserSeeder extends Seeder
                 'email' => 'pleno@example.com',
                 'num_empleado' => '9201001',
                 'password' => Hash::make('12345678'),
-                'ponencia_id' => null,
+                'adminJud' => null,
                 'rol' => 'Pleno',
+            ],
+
+            [
+                'name' => 'Oficialía',
+                'email' => 'oficilia@example.com',
+                'num_empleado' => '9201002',
+                'password' => Hash::make('12345678'),
+                'adminJud' => null,
+                'rol' => 'Oficialía',
             ],
         ];
 

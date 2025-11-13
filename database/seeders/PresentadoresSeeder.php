@@ -4,13 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Presentador;
-use App\Models\Ponencia;
+use Illuminate\Support\Carbon;
 
 class PresentadoresSeeder extends Seeder
 {
     public function run(): void
     {
-        // Nos aseguramos de que existan las ponencias
+        $ahora = Carbon::now();
+
+        // IDs de las ponencias (asegúrate de que coincidan con los creados en AdminJudicialSeeder)
         $ponencias = [
             'Secretaría Ejecutiva' => 1,
             'Ponencia 1' => 2,
@@ -24,39 +26,46 @@ class PresentadoresSeeder extends Seeder
             [
                 'nombre' => 'Secretaría Ejecutiva',
                 'cargo' => 'Secretaria Ejecutiva',
-                'ponencia_id' => $ponencias['Secretaría Ejecutiva'],
+                'fk_adminJud' => $ponencias['Secretaría Ejecutiva'],
             ],
             [
                 'nombre' => 'Mtra. Reyna Concepción Mince Serrano',
                 'cargo' => 'Magistrada',
-                'ponencia_id' => $ponencias['Ponencia 1'],
+                'fk_adminJud' => $ponencias['Ponencia 1'],
             ],
             [
                 'nombre' => 'Mag. Jorge Guerrero Meléndez',
                 'cargo' => 'Magistrado',
-                'ponencia_id' => $ponencias['Ponencia 2'],
+                'fk_adminJud' => $ponencias['Ponencia 2'],
             ],
             [
                 'nombre' => 'Mag. Víctor Hugo González Rodríguez',
                 'cargo' => 'Magistrado',
-                'ponencia_id' => $ponencias['Ponencia 3'],
+                'fk_adminJud' => $ponencias['Ponencia 3'],
             ],
             [
                 'nombre' => 'Mtra. Sara Alicia Alvarado Avendaño',
                 'cargo' => 'Magistrada',
-                'ponencia_id' => $ponencias['Ponencia 4'],
+                'fk_adminJud' => $ponencias['Ponencia 4'],
             ],
             [
                 'nombre' => 'Dr. Moisés Vergara Trejo',
                 'cargo' => 'Magistrado',
-                'ponencia_id' => $ponencias['Ponencia 5'],
+                'fk_adminJud' => $ponencias['Ponencia 5'],
             ],
         ];
 
         foreach ($presentadores as $p) {
-            Presentador::firstOrCreate([
-                'nombre' => $p['nombre'],
-            ], $p);
+            Presentador::firstOrCreate(
+                ['nombre' => $p['nombre']],
+                [
+                    'cargo' => $p['cargo'],
+                    'fk_adminJud' => $p['fk_adminJud'],
+                    'activo' => 1,
+                    'fechaAlta' => $ahora,
+                    'fechaModificacion' => $ahora,
+                ]
+            );
         }
     }
 }

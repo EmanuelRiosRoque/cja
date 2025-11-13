@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Catalogos;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Estatus extends Model
+class CatAnexo extends Model
 {
     use HasFactory;
 
-    protected $table = 'estatus';
+    protected $table = 'catAnexo';
+
+    public $timestamps = false;
 
     protected $fillable = [
-        'nombre',
+        'anexo',
+        'activo',
     ];
-
 }

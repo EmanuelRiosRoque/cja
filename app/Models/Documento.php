@@ -2,25 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Documento extends Model
 {
-    use HasFactory;
-
     protected $table = 'documentos';
 
     protected $fillable = [
-        'tema_id',
         'nombre',
-        'url',
         'idGlobal',
-        'tipo',
+        'rutaGlobal',
+        'tipoArchivo',
+        'fechaAlta',
+        'fechaModificacion',
+        'fk_solicitud',
+        'fk_tema'
     ];
 
-    public function tema()
-    {
-        return $this->belongsTo(Tema::class);
-    }
+    public $timestamps = false; // si tu tabla no tiene created_at y updated_at
 }

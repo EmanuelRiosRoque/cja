@@ -27,11 +27,15 @@
     'danger'    => 'bg-red-600 text-white border border-transparent
                     hover:bg-red-500 focus:bg-red-500 active:bg-red-700
                     focus:ring-red-500',
+    'blue'       => 'bg-blue-600 text-white border border-transparent
+                    hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700
+                    focus:ring-blue-500',
     'warning'    => 'bg-yellow-400 text-white border border-transparent
                     hover:bg-yellow-500 focus:bg-yellow-500 active:bg-yellow-600
                     focus:ring-yellow-500',
     'outline'   => 'bg-transparent text-emerald-800 border border-emerald-800
                     hover:bg-emerald-50 focus:ring-emerald-500',
+                  
   ];
 
   // Resuelve valores con fallback sin usar ?? dentro de interpolación

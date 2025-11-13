@@ -1,3 +1,4 @@
+ {{-- FILTROS DE BÚSQUEDA --}}
     <div class="grid grid-cols-4 gap-4 mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
         <div>
             <x-ui.date-picker label="Fecha de recepción" wire:model="fecha_recepcion" :disable-past="true" />
@@ -68,12 +69,9 @@
                 <option value="2">Copia</option>
             </select>
         </div>
-        <div class="">
-            <x-button wire:click="limpiarFiltros" variant="secondary">
-                LIMPIAR
-            </x-button>
-            <x-button wire:click="buscarRegistros" variant="primary">
-                BUSCAR
-            </x-button>
+
+        <div class="flex items-end gap-2">
+            <x-button wire:click="limpiarFiltros" variant="secondary">LIMPIAR</x-button>
+            <x-button wire:click="buscarRegistros" variant="primary">BUSCAR</x-button>
         </div>
     </div>
