@@ -25,9 +25,9 @@ trait HelperUi
         // Cast seguro del select
         $esAdic = ($this->es_asunto_adicional === '1' || $this->es_asunto_adicional === 1 || $this->es_asunto_adicional === true);
 
-        $max = Tema::where('sesion_id', $this->sesion_id)
-            ->where('es_asunto_adicional', $esAdic)
-            ->max('numero_tema');
+        $max = Tema::where('fk_sesion', $this->sesion_id)
+            ->where('esAdicional', $esAdic)
+            ->max('numeroTema');
 
         $this->numero_tema = (int) $max + 1;
     }

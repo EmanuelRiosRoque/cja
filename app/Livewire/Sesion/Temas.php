@@ -18,7 +18,7 @@ class Temas extends Component
 
         $this->temas = $sesion->temas()
             ->with('presentadores')
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
     }
 

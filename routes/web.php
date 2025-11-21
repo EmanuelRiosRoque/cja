@@ -36,12 +36,16 @@ Route::middleware([
                 Route::get('/{sesion}/adjuntar', 'adjuntar')->name('adjuntar');
             });
 
-            Route::middleware('role:Administrador')->group(function () {
+            Route::middleware('role:Administrador|SuperAdmin')->group(function () {
                 Route::get('/{sesion}/monitor', 'monitor')->name('monitor');
             });
 
-            Route::middleware('role:Coordinador')->group(function () {
+            Route::middleware('role:Coordinador|SuperAdmin')->group(function () {
                 Route::get('/{sesion}/asignar', 'asignar')->name('asignar');
+            });
+
+            Route::middleware('role:Pleno|SuperAdmin')->group(function () {
+                Route::get('/asignados', 'asignados')->name('asignados');
             });
 
             Route::get('/{sesion}/ponencia', 'ponencia')->name('ponencia');
@@ -56,7 +60,7 @@ Route::middleware([
         ->group(function () {
 
             Route::middleware('role:Oficialía')->group(function () {
-                Route::get('/registro', 'registroDocumento')->name('registro');
+                Route::get('/registro/{id?}', 'registroDocumento')->name('registro');
                 Route::get('/turnos', 'turnos')->name('turnos');
                 Route::get('/reportes', 'reportes')->name('reportes');
             });

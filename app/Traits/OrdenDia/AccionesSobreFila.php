@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 trait AccionesSobreFila
 {
-   public function editar($id): void
+    public function editar($id): void
     {
         $tema = Tema::with('presentadores')->findOrFail($id);
 
         $this->editando_id = $tema->id;
-        $this->numero_tema = $tema->numero_tema; // congelado en edición
+        $this->numero_tema = $tema->numeroTema; // correcto
         $this->descripcion = $tema->descripcion;
         $this->prioridad = $tema->prioridad;
 
-        $this->es_asunto_adicional = $tema->es_asunto_adicional ? '1' : '0';
+        $this->es_asunto_adicional = $tema->esAdicional ? '1' : '0';
 
         $ids = $tema->presentadores->pluck('id')->toArray();
         $this->presentadoresSeleccionados = !empty($ids) ? array_values($ids) : [''];
@@ -25,10 +25,20 @@ trait AccionesSobreFila
     public function eliminar($id): void
     {
         $tema = Tema::findOrFail($id);
+
+        // 1. Eliminar relaciones del pivot presentador_tema
+        $tema->presentadores()->detach();
+
+        // 2. Eliminar documentos relacionados
+        if (method_exists($tema, 'documentos')) {
+            $tema->documentos()->delete();
+        }
+
+        // 3. Eliminar el tema
         $tema->delete();
 
+        // 4. Refrescar
         $this->cargarTemas();
-        // Después de borrar, recalcula el siguiente número por el grupo actual
         $this->recalcNumeroTema();
 
         session()->flash('success', 'Tema eliminado.');
@@ -38,21 +48,20 @@ trait AccionesSobreFila
     {
         $tema = Tema::findOrFail($id);
 
-        // vecino inmediatamente anterior dentro del mismo grupo
-        $vecino = Tema::where('sesion_id', $tema->sesion_id)
-            ->where('es_asunto_adicional', $tema->es_asunto_adicional)
-            ->where('numero_tema', '<', $tema->numero_tema)
-            ->orderBy('numero_tema', 'desc')
+        $vecino = Tema::where('fk_sesion', $tema->fk_sesion)
+            ->where('esAdicional', $tema->esAdicional)
+            ->where('numeroTema', '<', $tema->numeroTema)
+            ->orderBy('numeroTema', 'desc')
             ->first();
 
         if (!$vecino) return;
 
         DB::transaction(function () use ($tema, $vecino) {
-            $a = $tema->numero_tema;
-            $b = $vecino->numero_tema;
+            $a = $tema->numeroTema;
+            $b = $vecino->numeroTema;
 
-            $tema->update(['numero_tema' => $b]);
-            $vecino->update(['numero_tema' => $a]);
+            $tema->update(['numeroTema' => $b]);
+            $vecino->update(['numeroTema' => $a]);
         });
 
         $this->cargarTemas();
@@ -62,21 +71,20 @@ trait AccionesSobreFila
     {
         $tema = Tema::findOrFail($id);
 
-        // vecino inmediatamente siguiente dentro del mismo grupo
-        $vecino = Tema::where('sesion_id', $tema->sesion_id)
-            ->where('es_asunto_adicional', $tema->es_asunto_adicional)
-            ->where('numero_tema', '>', $tema->numero_tema)
-            ->orderBy('numero_tema', 'asc')
+        $vecino = Tema::where('fk_sesion', $tema->fk_sesion)
+            ->where('esAdicional', $tema->esAdicional)
+            ->where('numeroTema', '>', $tema->numeroTema)
+            ->orderBy('numeroTema', 'asc')
             ->first();
 
         if (!$vecino) return;
 
         DB::transaction(function () use ($tema, $vecino) {
-            $a = $tema->numero_tema;
-            $b = $vecino->numero_tema;
+            $a = $tema->numeroTema;
+            $b = $vecino->numeroTema;
 
-            $tema->update(['numero_tema' => $b]);
-            $vecino->update(['numero_tema' => $a]);
+            $tema->update(['numeroTema' => $b]);
+            $vecino->update(['numeroTema' => $a]);
         });
 
         $this->cargarTemas();

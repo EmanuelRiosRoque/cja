@@ -5,6 +5,9 @@ namespace App\Livewire\Sesion;
 use App\Models\Sede;
 use App\Models\TipoSesion;
 use App\Models\CaracterSesion;
+use App\Models\Catalogos\CatCaracterSesion;
+use App\Models\Catalogos\CatSede;
+use App\Models\Catalogos\CatTipoSesion;
 use App\Models\Sesion;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -39,9 +42,9 @@ class Formulario extends Component
 
     public function mount()
     {
-        $this->sedes = Sede::all();
-        $this->tipo_sesiones = TipoSesion::all();
-        $this->caracteres_sesiones = CaracterSesion::all();
+        $this->sedes = CatSede::all();
+        $this->tipo_sesiones = CatTipoSesion::all();
+        $this->caracteres_sesiones = CatCaracterSesion::all();
     }
 
     // ===== VALIDACIÓN =====
@@ -207,20 +210,24 @@ class Formulario extends Component
             $this->validate();
 
             $sesion = Sesion::create([
-                'forma_captura'    => $this->forma_captura,
-                'sede_id'          => $this->sede,
-                'tipo_sesion_id'   => $this->tipo_sesion,
-                'caracter_id'      => $this->caracter,
-                'fecha_programada' => $this->fecha_programada,
-                'hora_programada'  => $this->hora_programada,
-                'hora_termino'     => $this->hora_termino,
-                'bloqueado'        => $this->bloqueado,
+                'forma_captura'      => $this->forma_captura,
+                'fecha_programada'   => $this->fecha_programada,
+                'hora_programada'    => $this->hora_programada,
+                'hora_termino'       => $this->hora_termino,
+                'fechaAlta'          => now(), 
+                'fechaModificacion'  => null,
+                'fk_sede'            => $this->sede,
+                'fk_tipo_sesion'     => $this->tipo_sesion,
+                'fk_estatus'         => 1, // Pendiente
+                'fk_caracter'        => $this->caracter,
             ]);
 
             foreach ($this->recesos as $receso) {
                 $sesion->recesos()->create([
-                    'hora_inicio' => $receso['inicio'],
-                    'hora_fin'    => $receso['fin'],
+                    'hora_inicio'       => $receso['inicio'],
+                    'hora_fin'          => $receso['fin'],
+                    'fechaAlta'         => now(),
+                    'fechaModificacion' => null
                 ]);
             }
 

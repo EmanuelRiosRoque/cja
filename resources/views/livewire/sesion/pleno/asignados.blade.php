@@ -3,7 +3,7 @@
     @include('livewire.oficialia.includes.filtro')
 
     @if (session('message'))
-        <x-ui.alerts type="success" :message="session('message')" timer="true" />
+    <x-ui.alerts type="success" :message="session('message')" timer="true" />
     @endif
 
     {{-- TABLA --}}
@@ -63,23 +63,21 @@
                     </td>
 
                     {{-- DOCUMENTO --}}
-<td class="py-3 px-6 text-center">
-    <div class="flex items-center justify-center">
-        <a 
-            wire:click="abrirModalDocumentos({{ $solicitud->id }})"
-            class="w-5 transform hover:text-blue-600 hover:scale-110 cursor-pointer"
-            title="Ver documentos"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 15l3-3 3 3m0 0l-3 3m3-3H9" />
-            </svg>
-        </a>
-    </div>
-</td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex items-center justify-center">
+                            <a wire:click="abrirModalDocumentos({{ $solicitud->id }})"
+                                class="w-5 transform hover:text-blue-600 hover:scale-110 cursor-pointer"
+                                title="Ver documentos">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 15l3-3 3 3m0 0l-3 3m3-3H9" />
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
 
 
                     {{-- ACCIONES --}}
@@ -87,7 +85,7 @@
                         <div class="flex item-center justify-center">
 
                             {{-- EDITAR REGISTRO --}}
-                           <a href="{{ route('oficialia.registro', ['id' => $solicitud->id]) }}"
+                            <a href="{{ route('oficialia.registro', ['id' => $solicitud->id]) }}"
                                 class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110"
                                 title="Editar registro">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -158,93 +156,89 @@
         </x-slot>
     </x-dialog-modal>
 
-    {{-- MODAL DOCUMENTOS --}}
-   {{-- MODAL DE PREVIEW DE DOCUMENTO --}}
-<x-dialog-modal wire:model="modalDocumentos" maxWidth="2xl">
+    {{-- MODAL DE PREVIEW DE DOCUMENTO --}}
+    <x-dialog-modal wire:model="modalDocumentos" maxWidth="2xl">
 
-    <x-slot name="title">
-        Documentos del empleado 
-    </x-slot>
+        <x-slot name="title">
+            Documentos del empleado
+        </x-slot>
 
-    <x-slot name="content">
+        <x-slot name="content">
 
-        @php
+            @php
             // EJEMPLOS PARA VISTA
             $documentosSeleccionados = [
-                [
-                    'tipo' => 'Contrato PDF',
-                    'extension' => 'pdf',
-                    'url' => 'https://www.africau.edu/images/default/sample.pdf',
-                ],
-                  [
-                    'tipo' => 'Contrato PDF',
-                    'extension' => 'pdf',
-                    'url' => 'https://www.africau.edu/images/default/sample.pdf',
-                ],
-                  [
-                    'tipo' => 'Contrato PDF',
-                    'extension' => 'pdf',
-                    'url' => 'https://www.africau.edu/images/default/sample.pdf',
-                ],
-                  [
-                    'tipo' => 'Contrato PDF',
-                    'extension' => 'pdf',
-                    'url' => 'https://www.africau.edu/images/default/sample.pdf',
-                ],
+            [
+            'tipo' => 'Contrato PDF',
+            'extension' => 'pdf',
+            'url' => 'https://www.africau.edu/images/default/sample.pdf',
+            ],
+            [
+            'tipo' => 'Contrato PDF',
+            'extension' => 'pdf',
+            'url' => 'https://www.africau.edu/images/default/sample.pdf',
+            ],
+            [
+            'tipo' => 'Contrato PDF',
+            'extension' => 'pdf',
+            'url' => 'https://www.africau.edu/images/default/sample.pdf',
+            ],
+            [
+            'tipo' => 'Contrato PDF',
+            'extension' => 'pdf',
+            'url' => 'https://www.africau.edu/images/default/sample.pdf',
+            ],
             ];
-        @endphp
+            @endphp
 
 
-        @if (!empty($documentosSeleccionados))
+            @if (!empty($documentosSeleccionados))
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 @foreach ($documentosSeleccionados as $doc)
 
-                    @php
-                        $ext = strtolower($doc['extension'] ?? '');
-                    @endphp
+                @php
+                $ext = strtolower($doc['extension'] ?? '');
+                @endphp
 
-                    <div class="border rounded-lg p-2 bg-gray-50 shadow-sm">
+                <div class="border rounded-lg p-2 bg-gray-50 shadow-sm">
 
-                        <h4 class="text-sm font-semibold text-gray-700 mb-2">
-                            {{ $doc['tipo'] }}
-                        </h4>
+                    <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                        {{ $doc['tipo'] }}
+                    </h4>
 
-                        {{-- ===========================
-                            DOCUMENTO EXISTENTE
-                        ============================ --}}
-                        @if ($doc['url'])
+                    {{-- ===========================
+                    DOCUMENTO EXISTENTE
+                    ============================ --}}
+                    @if ($doc['url'])
 
-                            {{-- PDF --}}
-                            @if ($ext === 'pdf')
-                                <iframe
-                                    src="{{ $doc['url'] }}#toolbar=0"
-                                    class="w-full h-64 rounded-md border"
-                                ></iframe>
+                    {{-- PDF --}}
+                    @if ($ext === 'pdf')
+                    <iframe src="{{ $doc['url'] }}#toolbar=0" class="w-full h-64 rounded-md border"></iframe>
 
-                             
-                            @endif
-                        {{-- ============================
-                            SIN DOCUMENTO
-                        ============================= --}}
-                        @else
-                            <p class="text-gray-500 text-sm italic text-center py-8">
-                                Documento no disponible
-                            </p>
 
-                            <div class="text-center text-xs text-gray-400">
-                                Ejemplo: el empleado no ha subido este archivo.
-                            </div>
-                        @endif
+                    @endif
+                    {{-- ============================
+                    SIN DOCUMENTO
+                    ============================= --}}
+                    @else
+                    <p class="text-gray-500 text-sm italic text-center py-8">
+                        Documento no disponible
+                    </p>
 
+                    <div class="text-center text-xs text-gray-400">
+                        Ejemplo: el empleado no ha subido este archivo.
                     </div>
+                    @endif
+
+                </div>
 
                 @endforeach
 
             </div>
 
-        @else
+            @else
 
             <p class="text-sm text-gray-500 text-center py-6">
                 No hay documentos disponibles para este empleado.
@@ -254,20 +248,17 @@
                 Ejemplo: lista vacía.
             </div>
 
-        @endif
+            @endif
 
-    </x-slot>
+        </x-slot>
 
-    <x-slot name="footer">
-        <x-secondary-button wire:click="$set('modalDocumentos', false)">
-            Cerrar
-        </x-secondary-button>
-    </x-slot>
+        <x-slot name="footer">
+            <x-secondary-button wire:click="$set('modalDocumentos', false)">
+                Cerrar
+            </x-secondary-button>
+        </x-slot>
 
-</x-dialog-modal>
-
-
-
+    </x-dialog-modal>
 
     {{-- MODAL EDITAR TURNO --}}
     <x-dialog-modal wire:model="modalEditarTurno" maxWidth="md">
@@ -282,7 +273,7 @@
                 class="w-full border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
                 <option value="">-- Selecciona el área --</option>
                 @foreach(\App\Models\Catalogos\CatAreaTurno::all() as $area)
-                    <option value="{{ $area->id }}">{{ $area->areaTurno }}</option>
+                <option value="{{ $area->id }}">{{ $area->areaTurno }}</option>
                 @endforeach
             </select>
         </x-slot>

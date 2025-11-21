@@ -57,6 +57,7 @@
             {{-- Navegación --}}
             <nav class="flex-1 overflow-y-auto p-3">
                 <ul class="space-y-1">
+                    @role('Oficialía')
                     <li>
                         <x-nav.item href="{{ route('dashboard') }}" route="dashboard">
                             <x-slot:icon>
@@ -68,65 +69,61 @@
                             {{ __('Dashboard') }}
                         </x-nav.item>
                     </li>
-    <li>
-        <x-nav.item href="{{ route('oficialia.registro') }}" route="oficialia.registro">
-            <x-slot:icon>
-                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
-                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
-                </svg>
-            </x-slot:icon>
-            {{ __('Registro de documento') }}
-        </x-nav.item>
-    </li>
 
-    <li>
-        <x-nav.item href="{{ route('oficialia.turnos') }}" route="oficialia.turnos">
-            <x-slot:icon>
-                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
-                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
-                </svg>
-            </x-slot:icon>
-                                {{ __('Administración de turnos') }}
-        </x-nav.item>
-    </li>
+                    <li>
+                        <x-nav.item href="{{ route('oficialia.registro') }}" route="oficialia.registro">
+                            <x-slot:icon>
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                </svg>
+                            </x-slot:icon>
+                            {{ __('Registro de documento') }}
+                        </x-nav.item>
+                    </li>
 
+                    <li>
+                        <x-nav.item href="{{ route('oficialia.turnos') }}" route="oficialia.turnos">
+                            <x-slot:icon>
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                </svg>
+                            </x-slot:icon>
+                            {{ __('Administración de turnos') }}
+                        </x-nav.item>
+                    </li>
 
+                    <li>
+                        <x-nav.item href="{{ route('oficialia.reportes') }}" route="oficialia.reportes">
+                            <x-slot:icon>
+                                <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
+                                    <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
+                                </svg>
+                            </x-slot:icon>
+                            {{ __('Reportes') }}
+                        </x-nav.item>
+                    </li>
+                    @endhasrole
 
-                
-
-                        <li>
-                            <x-nav.item href="{{ route('oficialia.reportes') }}" route="oficialia.reportes">
-                                <x-slot:icon>
-                                    <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                        <polyline points="14 2 14 8 20 8" stroke-width="1.8" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        <line x1="8" y1="13" x2="16" y2="13" stroke-width="1.8" stroke-linecap="round" />
-                                        <line x1="8" y1="17" x2="16" y2="17" stroke-width="1.8" stroke-linecap="round" />
-                                    </svg>
-                                </x-slot:icon>
-                                {{ __('Reportes') }}
-                            </x-nav.item>
-                        </li>
                     {{-- Ocultar todo este bloque si el rol es "Oficialía" --}}
-                    @unlessrole('Oficialía')
-
-                    {{-- Dashboard --}}
-
-
-                    {{-- Programar sesión --}}
+                    @unlessrole(['Oficialía', 'Pleno'])
                     <li>
                         <x-nav.item href="{{ route('sesion.create') }}" route="sesion.create">
                             <x-slot:icon>
@@ -166,7 +163,22 @@
 
                     @endunlessrole
 
-
+                    @role(['Pleno','SuperAdmin'])
+                    <li>
+                        <x-nav.item href="{{ route('sesion.asignados') }}" route="sesion.index">
+                            <x-slot:icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <polyline points="12 7 12 12 15 15" stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </x-slot:icon>
+                            {{ __('Sesiones Asignadas') }}
+                        </x-nav.item>
+                    </li>
+                    @endrole
                 </ul>
 
 

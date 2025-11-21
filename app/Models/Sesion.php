@@ -15,16 +15,26 @@ class Sesion extends Model
 
     protected $table = 'sesiones';
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'forma_captura',
-        'sede_id',
         'folio',
-        'tipo_sesion_id',
-        'caracter_id',
+        'forma_captura',
         'fecha_programada',
         'hora_programada',
         'hora_termino',
+        'fechaAlta',
+        'fechaModificacion',
+        'fk_sede',
+        'fk_tipo_sesion',
+        'fk_estatus',
+        'fk_caracter'
     ];
+
+    public function recesos()
+    {
+        return $this->hasMany(Receso::class, 'fk_sesion');
+    }
 
     public function sede()
     {
@@ -43,13 +53,14 @@ class Sesion extends Model
 
     public function caracter()
     {
-        return $this->belongsTo(CatCaracterSesion::class);
+        return $this->belongsTo(CatCaracterSesion::class, 'fk_caracter', 'id');
     }
 
     public function temas()
     {
-        return $this->hasMany(Tema::class);
+        return $this->hasMany(Tema::class, 'fk_sesion', 'id');
     }
+
 
 
     protected static function booted()

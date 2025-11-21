@@ -2,41 +2,47 @@
 
 namespace App\Models;
 
+use App\Models\Catalogos\CatEstatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Tema extends Model
 {
     protected $table = 'temas';
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'sesion_id',
-        'numero_tema',
+        'numeroTema',
         'descripcion',
         'prioridad',
-        'es_asunto_adicional',
-        'estatus_id',
+        'esAdicional',
+        'fk_sesion',
+        'fk_estatus',
     ];
 
     public function sesion()
     {
-        return $this->belongsTo(Sesion::class);
+        return $this->belongsTo(Sesion::class, 'fk_sesion', 'id');
     }
 
     public function estatus()
     {
-        return $this->belongsTo(Estatus::class);
+        return $this->belongsTo(CatEstatus::class, 'fk_estatus', 'id');
     }
 
     public function documentos()
     {
-        return $this->hasMany(Documento::class, 'tema_id');
+        return $this->hasMany(Documento::class, 'fk_tema', 'id');
     }
-    
+
     public function presentadores()
     {
-        return $this->belongsToMany(Presentador::class, 'presentador_tema')
-                    ->withPivot('es_principal')
-                    ->withTimestamps();
+        return $this->belongsToMany(
+            Presentador::class,
+            'presentador_tema',   
+            'fk_tema',            
+            'fk_presentador'      
+        )->withPivot('esPrincipal', 'fechaAlta', 'fechaModificacion');
     }
 
     public function getTieneMultiplesPresentadoresAttribute(): bool
@@ -46,7 +52,7 @@ class Tema extends Model
 
     public function asignaciones()
 {
-    return $this->hasMany(\App\Models\TemaAsignado::class, 'tema_id');
+    return $this->hasMany(TemaAsignado::class, 'fk_tema');
 }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Oficialia\Solicitud;
 use App\Models\Presentador;
 use App\Models\Sesion;
 
@@ -61,6 +62,24 @@ class SesionController extends Controller
     {
         return view('sesion.ordenDia.coordinador.asignar', [
             'sesion' => $sesion,
+        ]);
+    }
+
+    // VIEWS PARA PLENO
+    public function asignados()
+    {
+        //Solicitudes = asignadas por oficilia
+
+        $user = auth()->user();
+
+        if ($user->hasRole('Pleno')) {
+            $solicitudes = Solicitud::where('fk_areaTurno', 1)
+            ->whereNot('fk_estatus', 4)
+            ->get();
+        }
+        
+        return view('sesion.ordenDia.pleno.asignados', [
+            'solicitudes' => $solicitudes 
         ]);
     }
 

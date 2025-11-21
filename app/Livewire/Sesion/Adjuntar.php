@@ -27,7 +27,7 @@ class Adjuntar extends Component
 
         $this->temas = $sesion->temas()
             ->with(['presentadores', 'documentos'])
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
     }
 
@@ -68,7 +68,7 @@ class Adjuntar extends Component
         // recarga temas actualizados
         $this->temas = $this->sesion->temas()
             ->with(['presentadores', 'documentos'])
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
 
         // limpia estado Livewire

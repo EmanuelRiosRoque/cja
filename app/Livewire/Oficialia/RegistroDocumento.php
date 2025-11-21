@@ -15,6 +15,10 @@ use Illuminate\Support\Carbon;
 
 class RegistroDocumento extends Component
 {
+
+    public $idSolicitud;
+    public $modoEdicion;
+
     public $catEntregas = [];
     public $catTipoDocs = [];
     public $catTurnos = [];
@@ -50,22 +54,110 @@ class RegistroDocumento extends Component
         'no_oficio' => 'required|string|max:255',
         'turno' => 'required|integer',
         'descripcion' => 'required|string|max:1000',
-        'anexos' => 'required|boolean',
+        'anexos' => 'required|integer',
         'descripcion_anexos' => 'nullable|string|max:500',
         'tipo_procedencia' => 'required|integer',
         'area_procedencia' => 'nullable|string|max:255',
         'area_procedencia_text' => 'nullable|string|max:255',
     ];
 
-    public function mount()
-    {
-        $this->catEntregas = CatEntrega::where('activo', 1)->get();
-        $this->catTipoDocs = CatTipoDoc::where('activo', 1)->get();
-        $this->catTurnos = CatAreaTurno::where('activo', 1)->get();
-        $this->catAnexos = CatAnexo::where('activo', 1)->get();
-        $this->catProcedencias = CatTipoProcedencia::where('activo', 1)->get();
-        $this->catAreaProcedencias = CatAreaProcedencia::where('activo', 1)->get();
+   public function mount($idSolicitud = null)
+{
+    $this->catEntregas = CatEntrega::where('activo', 1)->get();
+    $this->catTipoDocs = CatTipoDoc::where('activo', 1)->get();
+    $this->catTurnos = CatAreaTurno::where('activo', 1)->get();
+    $this->catAnexos = CatAnexo::where('activo', 1)->get();
+    $this->catProcedencias = CatTipoProcedencia::where('activo', 1)->get();
+    $this->catAreaProcedencias = CatAreaProcedencia::where('activo', 1)->get();
+
+    if ($idSolicitud) {
+        $this->modoEdicion = true;   
+
+        $solicitud = Solicitud::with('promoventes')->find($idSolicitud);
+
+        if ($solicitud) {
+            $this->idSolicitud = $idSolicitud;
+
+            $this->fecha_recepcion = $solicitud->fechaRecepcion
+                ? Carbon::parse($solicitud->fechaRecepcion)->format('Y-m-d')
+                : null;
+
+            $this->tipo_entrega       = $solicitud->fk_entrega;
+            $this->tipo               = $solicitud->fk_tipoDoc;
+            $this->no_oficio          = $solicitud->numOficio;
+            $this->turno              = $solicitud->fk_areaTurno;
+            $this->descripcion        = $solicitud->descripcion;
+            $this->anexos             = $solicitud->fk_anexo;
+            $this->descripcion_anexos = $solicitud->descripcionAnexos;
+            $this->tipo_procedencia   = $solicitud->fk_tipoProcedencia;
+
+            if ($solicitud->fk_tipoProcedencia == 2) {
+                $this->area_procedencia_text = $solicitud->areaExterna;
+            } else {
+                $this->area_procedencia = $solicitud->areaExterna;
+            }
+
+            $this->promoventes = $solicitud->promoventes->map(function ($p) {
+                return [
+                    'nombre'      => $p->nombre,
+                    'paterno'     => $p->aPaterno,
+                    'materno'     => $p->aMaterno,
+                    'area_id'     => $p->fk_areaProcedencia,
+                    'area_nombre' => $p->areaExterna,
+                ];
+            })->toArray();
+        }
     }
+}
+
+public function actualizarRegistro()
+{
+    $this->validate();
+
+    $solicitud = Solicitud::find($this->idSolicitud);
+
+    if (!$solicitud) return;
+
+    $areaExterna = $this->tipo_procedencia == 2
+        ? $this->area_procedencia_text
+        : $this->area_procedencia;
+
+    $solicitud->update([
+        'fechaRecepcion' => $this->fecha_recepcion,
+        'numOficio' => $this->no_oficio,
+        'descripcion' => $this->descripcion,
+        'descripcionAnexos' => $this->descripcion_anexos,
+        'fk_entrega' => $this->tipo_entrega,
+        'fk_tipoDoc' => $this->tipo,
+        'fk_areaTurno' => $this->turno,
+        'fk_tipoProcedencia' => $this->tipo_procedencia,
+        'areaExterna' => $areaExterna,
+        'fk_anexo' => $this->anexos,
+        'usuarioModificacion' => auth()->id() ?? 1,
+    ]);
+
+    Promovente::where('fk_solicitud', $solicitud->id)->delete();
+
+    foreach ($this->promoventes as $item) {
+        Promovente::create([
+            'nombre'              => $item['nombre'],
+            'aPaterno'            => $item['paterno'],
+            'aMaterno'            => $item['materno'],
+            'areaExterna'         => $item['area_nombre'],
+            'fk_areaProcedencia'  => $item['area_id'],
+            'fk_solicitud'        => $solicitud->id,
+            'fechaAlta'           => Carbon::now(),
+            'usuarioAlta'         => auth()->id() ?? 1,
+            'usuarioModificacion' => auth()->id() ?? 1,
+        ]);
+    }
+        $this->mostrarModalConfirmacion = false;
+        $this->mount();
+        $this->dispatch('form-enviado');
+    session()->flash('success', 'La solicitud fue actualizada correctamente.');
+}
+
+
 
     public function realizarRegistro()
     {
@@ -75,7 +167,7 @@ class RegistroDocumento extends Component
             ? $this->area_procedencia_text
             : $this->area_procedencia;
 
-        // 1️⃣ Crear solicitud
+        // 1 Crear solicitud
         $solicitud = Solicitud::create([
             'folio' => 'TEMP-' . time(),
             'fechaRecepcion' => $this->fecha_recepcion,
@@ -94,7 +186,7 @@ class RegistroDocumento extends Component
             'fk_anexo' => $this->anexos,
         ]);
 
-        // 2️⃣ Insertar promoventes
+        // 2 Insertar promoventes
         if (!empty($this->promoventes)) {
             foreach ($this->promoventes as $item) {
 
@@ -107,6 +199,7 @@ class RegistroDocumento extends Component
                         'nombre'              => $item['nombre'] ?? null,
                         'aPaterno'            => $item['paterno'] ?? null,
                         'aMaterno'            => $item['materno'] ?? null,
+                        'areaExterna'         => $item['area_nombre'] ?? null,
                         'fechaAlta'           => Carbon::now(),
                         'usuarioAlta'         => auth()->id() ?? 1,
                         'usuarioModificacion' => auth()->id() ?? 1,
@@ -117,7 +210,7 @@ class RegistroDocumento extends Component
             }
         }
 
-        // 3️⃣ Limpiar campos
+        // 3 Limpiar campos
         $this->reset([
             'fecha_recepcion',
             'tipo_entrega',

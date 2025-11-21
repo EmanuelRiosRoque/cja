@@ -20,7 +20,7 @@
             <tbody>
                 @forelse ($temas as $index => $tema)
                 <tr>
-                    <td class="p-2 border text-center w-10">{{ $tema->numero_tema }}</td>
+                    <td class="p-2 border text-center w-10">{{ $tema->numeroTema }}</td>
                     <td class="p-2 border align-top text-center">
                         @if ($tema->documentos->isNotEmpty())
                         <x-button wire:click="abrirModal({{ $tema->id }})" variant="secondary" size="sm">

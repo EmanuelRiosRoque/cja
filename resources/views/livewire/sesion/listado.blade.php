@@ -33,10 +33,7 @@
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex flex-col items-center text-gray-700">
                                         <div class="flex items-center gap-1 text-xs text-gray-500">
-                                            {{ $sesion->created_at->format('d/m/Y') }}
-                                        </div>
-                                        <div class="flex items-center gap-1 text-sm font-medium">
-                                            {{ $sesion->created_at->format('h:i A') }}
+                                            {{ \Carbon\Carbon::parse($sesion->fechaAlta)->format('d/m/Y') }}
                                         </div>
                                     </div>
                                 </td>
@@ -47,11 +44,11 @@
                                             Agregar
                                         </x-button>
                                     @else
-                                        @role('Pleno')
+                                        @role(['Pleno', 'SuperAdmin'])
                                             @include('sesion.includes.orden-dia.integrador.views')
                                         @endrole
 
-                                        @role('Administrador')
+                                        @role(['Administrador', 'SuperAdmin'])
                                             <div class="flex item-center justify-center">
                                                 <a href="{{ route('sesion.monitor', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -62,7 +59,7 @@
                                             </div>
                                         @endrole
 
-                                        @role('Coordinador')
+                                        @role(['Coordinador','SuperAdmin'])
                                             <div class="flex item-center justify-center">
                                                 <a href="{{ route('sesion.asignar', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -75,9 +72,9 @@
                                                 </a>
                                             </div>
                                         @endrole
-                                        @role('Integrador')
+                                        @role(['Integrador','SuperAdmin'])
                                             <div class="flex item-center justify-center">
-                                                <a href="{{ route('sesion.asignar', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
+                                                <a href="{{ route('sesion.ponencia', $sesion) }}" class="w-4 mr-2 transform hover:text-emerald-500 hover:scale-110">
                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
                                                         fill="none" stroke="currentColor" stroke-width="1.6" 
                                                         stroke-linecap="round" stroke-linejoin="round" 

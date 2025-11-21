@@ -6,7 +6,7 @@
             Tipo de sesión
         </p>
         <p class="mt-1 text-sm font-medium text-emerald-900 text-center">
-            {{ $sesion->tipoSesion->nombre ?? '—' }}
+            {{ $sesion->forma_captura ? 'Programada' : 'Referida' }}
         </p>
     </div>
 

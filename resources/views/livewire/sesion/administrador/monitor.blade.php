@@ -28,7 +28,7 @@
                 <tbody>
                     @forelse ($temas as $tema)
                         <tr>
-                            <td class="p-2 border text-center">{{ $tema->numero_tema }}</td>
+                            <td class="p-2 border text-center">{{ $tema->numeroTema }}</td>
                             <td class="p-2 border">{{ $tema->descripcion }}</td>
 
                             <td class="p-2 border text-center">

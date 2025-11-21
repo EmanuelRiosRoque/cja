@@ -9,10 +9,7 @@
   <div class="pt-2">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-      <livewire:sesion.orden-dia
-        :sesion="$sesion"
-        :presentadores="$presentadores"
-      />
+      <livewire:sesion.orden-dia :sesion="$sesion" :presentadores="$presentadores"/>
     </div>
   </div>
 </div>

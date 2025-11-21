@@ -18,9 +18,12 @@ class Presentador extends Model
 
     public function temas()
     {
-        return $this->belongsToMany(Tema::class, 'presentador_tema')
-                    ->withPivot('es_principal')
-                    ->withTimestamps();
+        return $this->belongsToMany(
+            Tema::class,
+            'presentador_tema',    
+            'fk_presentador',      
+            'fk_tema'              
+        )->withPivot('esPrincipal', 'fechaAlta', 'fechaModificacion');
     }
     
     public function getNombreConCargoAttribute()

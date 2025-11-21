@@ -2,6 +2,7 @@
 
 namespace App\Models\Catalogos;
 
+use App\Models\Sesion;
 use Illuminate\Database\Eloquent\Model;
 
 class CatCaracterSesion extends Model
@@ -14,4 +15,10 @@ class CatCaracterSesion extends Model
         'nombre', 
         'activo'
     ];
+
+    public function sesiones()
+    {
+        return $this->hasMany(Sesion::class, 'fk_caracter', 'id');
+    }
+
 }

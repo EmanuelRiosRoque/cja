@@ -11,10 +11,9 @@ use App\Models\Catalogos\CatTipoProcedencia;
 
 class OficialiaController extends Controller
 {
-    
-   public function registroDocumento()
+    public function registroDocumento($id = null)
     {
-        return view('oficialia.registroDocumento');
+        return view('oficialia.registroDocumento', compact('id'));
     }
 
 

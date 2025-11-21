@@ -14,7 +14,7 @@ class Asignar extends Component
     public $temasSeleccionados = [];
     public $usuarioId;
     public $selectAll = false;
-    public $todosAsignados = false; // 🔹 NUEVA variable de control
+    public $todosAsignados = false; // NUEVA variable de control
 
     public function mount()
     {
@@ -26,16 +26,16 @@ class Asignar extends Component
     }
 
     /**
-     * 🔄 Refresca la lista de temas desde la sesión
+     * Refresca la lista de temas desde la sesión
      */
     public function cargarTemas()
     {
         $this->temas = $this->sesion->temas()
-            ->with(['presentadores.ponencia', 'estatus'])
-            ->orderBy('numero_tema')
+            ->with(['presentadores.adminJudicial', 'estatus'])
+            ->orderBy('numeroTema')
             ->get();
 
-        // 🔹 Verificamos si todos los temas ya están asignados
+        // Verificamos si todos los temas ya están asignados
         $this->todosAsignados = $this->temas->every(fn ($tema) => $tema->estatus_id == 2);
     }
 
@@ -43,7 +43,7 @@ class Asignar extends Component
     {
         // Solo selecciona los temas que no estén asignados
         $this->temasSeleccionados = $value
-            ? $this->temas->where('estatus_id', '!=', 2)->pluck('id')->toArray()
+            ? $this->temas->where('fk_estatus', '!=', 2)->pluck('id')->toArray()
             : [];
     }
 
@@ -63,8 +63,8 @@ class Asignar extends Component
 
         $temas = $this->sesion->temas()
             ->whereIn('id', $this->temasSeleccionados)
-            ->where('estatus_id', '!=', 2)
-            ->get(['id', 'numero_tema', 'descripcion', 'estatus_id']);
+            ->where('fk_estatus', '!=', 2)
+            ->get(['id', 'numeroTema', 'descripcion', 'fk_estatus']);
 
         if ($temas->isEmpty()) {
             session()->flash('error', 'Todos los temas seleccionados ya fueron asignados.');
@@ -72,25 +72,25 @@ class Asignar extends Component
         }
 
         foreach ($temas as $tema) {
-            $yaAsignado = TemaAsignado::where('user_id', $usuario->id)
-                ->where('tema_id', $tema->id)
+            $yaAsignado = TemaAsignado::where('fk_user', $usuario->id)
+                ->where('fk_tema', $tema->id)
                 ->exists();
 
             if (!$yaAsignado) {
                 TemaAsignado::create([
-                    'user_id' => $usuario->id,
-                    'tema_id' => $tema->id,
+                    'fk_user' => $usuario->id,
+                    'fk_tema' => $tema->id,
                 ]);
 
-                $tema->estatus_id = 2;
+                $tema->fk_estatus = 2;
                 $tema->save();
             }
         }
 
-        // 🔄 Refrescar lista de temas
+        // Refrescar lista de temas
         $this->cargarTemas();
 
-        // 🔹 Limpiar selección
+        // Limpiar selección
         $this->temasSeleccionados = [];
         $this->selectAll = false;
 
@@ -102,14 +102,14 @@ class Asignar extends Component
         $ponenciaId = $this->temas
             ->pluck('presentadores')
             ->flatten()
-            ->pluck('ponencia_id')
+            ->pluck('fk_adminJud')
             ->filter()
             ->first();
 
         $usuarios = collect();
 
         if ($ponenciaId) {
-            $usuarios = User::where('ponencia_id', $ponenciaId)
+            $usuarios = User::where('adminJud', $ponenciaId)
                 ->role(['Coordinador', 'Integrador', 'Pleno'])
                 ->orderBy('name')
                 ->get();

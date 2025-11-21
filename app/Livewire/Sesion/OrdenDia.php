@@ -68,18 +68,19 @@ class OrdenDia extends Component
 
     public function cargarTemas(): void
     {
-        $this->temas = Tema::where('sesion_id', $this->sesion_id)
-            ->where('es_asunto_adicional', false)
+        $this->temas = Tema::where('fk_sesion', $this->sesion_id)
+            ->where('esAdicional', false)
             ->with('presentadores')
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
 
-        $this->temasAdicionales = Tema::where('sesion_id', $this->sesion_id)
-            ->where('es_asunto_adicional', true)
+        $this->temasAdicionales = Tema::where('fk_sesion', $this->sesion_id)
+            ->where('esAdicional', true)
             ->with('presentadores')
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
     }
+
 
     public function guardarTema(): void
     {
@@ -102,7 +103,7 @@ class OrdenDia extends Component
             $tema->update([
                 'descripcion' => $this->descripcion,
                 'prioridad' => $this->prioridad,
-                'es_asunto_adicional' => $esAdicBool,
+                'esAdicional' => $esAdicBool,
             ]);
 
             $tema->presentadores()->sync(array_filter($this->presentadoresSeleccionados));
@@ -111,11 +112,11 @@ class OrdenDia extends Component
             $this->recalcNumeroTema();
 
             $tema = Tema::create([
-                'sesion_id' => $this->sesion_id,
-                'numero_tema' => $this->numero_tema,
+                'fk_sesion' => $this->sesion_id,
+                'numeroTema' => $this->numero_tema,
                 'descripcion' => $this->descripcion,
                 'prioridad' => $this->prioridad,
-                'es_asunto_adicional' => $esAdicBool,
+                'esAdicional' => $esAdicBool,
             ]);
 
             $tema->presentadores()->attach(array_filter($this->presentadoresSeleccionados));

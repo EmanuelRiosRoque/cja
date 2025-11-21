@@ -37,7 +37,7 @@
                 <tbody>
                     @forelse ($temas as $tema)
                         @php
-                            $asignado = $tema->estatus_id == 2;
+                            $asignado = $tema->fk_estatus == 2;
                         @endphp
                         <tr class="{{ in_array($tema->id, $temasSeleccionados) ? 'bg-emerald-50' : '' }}">
                             <td class="p-2 border text-center">
@@ -49,7 +49,7 @@
                                     {{ $asignado ? 'disabled' : '' }}
                                 >
                             </td>
-                            <td class="p-2 border text-center">{{ $tema->numero_tema }}</td>
+                            <td class="p-2 border text-center">{{ $tema->numeroTema }}</td>
                             <td class="p-2 border">{{ $tema->descripcion }}</td>
                             <td class="p-2 border text-center">
                                 @php

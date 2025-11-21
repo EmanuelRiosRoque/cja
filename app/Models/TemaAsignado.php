@@ -9,20 +9,22 @@ class TemaAsignado extends Model
 {
     use HasFactory;
 
-    protected $table = 'temas_asignados';
+    protected $table = 'temasAsignados';
+
+    public $timestamps = false;
 
     protected $fillable = [
-        'user_id',
-        'tema_id',
+        'fk_user',
+        'fk_tema',
     ];
 
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'fk_user');
     }
 
     public function tema()
     {
-        return $this->belongsTo(Tema::class, 'tema_id');
+        return $this->belongsTo(Tema::class, 'fk_tema');
     }
 }

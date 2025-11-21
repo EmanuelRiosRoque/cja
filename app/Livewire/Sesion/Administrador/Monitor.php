@@ -12,7 +12,7 @@ class Monitor extends Component
     public function mount($sesion) {
          $this->temas = $sesion->temas()
             ->with('presentadores')
-            ->orderBy('numero_tema')
+            ->orderBy('numeroTema')
             ->get();
     }
 
