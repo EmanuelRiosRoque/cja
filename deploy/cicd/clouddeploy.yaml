@@ -1,0 +1,34 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: oaj-cd
+description: oaj CD pipeline
+serialPipeline:
+  stages:
+    - targetId: qa-target
+      profiles:
+        - qa
+    - targetId: prod-target
+      profiles:
+        - prod
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: qa-target
+description: QA cluster
+gke:
+  cluster: projects/tsjcdmx-k8s-qa/locations/northamerica-south1/clusters/autopilot-qa-cluster-1
+executionConfigs:
+  - usages:
+      - DEPLOY
+    serviceAccount: cloudbuild-tsjcdmx@tsjcdmx-k8s-prd.iam.gserviceaccount.com
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod-target
+description: Kubernetes Production Cluster
+requireApproval: true
+gke:
+  cluster: projects/tsjcdmx-k8s-prd/locations/northamerica-south1/clusters/k8s-prod-cluster-1

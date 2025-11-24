@@ -1,0 +1,18 @@
+apiVersion: skaffold/v4beta7
+kind: Config
+profiles:
+  - name: qa
+    manifests:
+      rawYaml:
+        - qa/oaj-deployment.yaml
+        - qa/oaj-svc.yaml
+        - qa/oaj-bknd.yaml
+        - qa/oaj-ingress.yaml
+        - qa/oaj-secrets.yaml
+  - name: prod
+    manifests:
+      rawYaml:
+        - prod/oaj-deployment.yaml
+        - prod/oaj-svc.yaml
+        - prod/oaj-bknd.yaml
+        - prod/oaj-ingress.yaml

@@ -1,0 +1,184 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oaj-app
+  name: oaj-app
+  namespace: conatrib
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: oaj-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: oaj-app
+    spec:
+      initContainers:
+      - name: oaj-fix-env
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Cargando variables de /secrets/credentials.txt"
+
+          # Copiando archivo de conf original
+          cp /config/.env /app/.env
+
+          # Leer variables del archivo de forma segura
+          while IFS='=' read -r key value; do
+              case "$key" in
+              DB_USERNAME) DB_USERNAME="$value" ;;
+              DB_PASSWORD) DB_PASSWORD="$value" ;;
+              DB_MONGO_USER) DB_MONGO_USER="$value" ;;
+              DB_MONGO_PASS) DB_MONGO_PASS="$value" ;;
+              esac
+          done < /secrets/credentials.txt
+
+          # Extraer IP y puerto de MongoDB de la línea DB_MONGO_URL existente
+          echo "Extrayendo configuración de MongoDB del archivo .env"
+          
+          # Buscar la línea DB_MONGO_URL y extraer host y puerto
+          EXISTING_MONGO_URL=$(grep '^DB_MONGO_URL=' /app/.env | cut -d'=' -f2- | tr -d '"' | tr -d "'" | xargs)
+          
+          if [ ! -z "$EXISTING_MONGO_URL" ]; then
+              echo "URL MongoDB encontrada: $EXISTING_MONGO_URL"
+              
+              # Extraer host y puerto de la URL existente
+              # Patrón: mongodb://usuario:password@IP:PUERTO/
+              DB_MONGO_HOST=$(echo "$EXISTING_MONGO_URL" | sed -n 's/.*@\([^:]*\):[0-9]*\/.*/\1/p')
+              DB_MONGO_PORT=$(echo "$EXISTING_MONGO_URL" | sed -n 's/.*@[^:]*:\([0-9]*\)\/.*/\1/p')
+              
+              echo "Host extraído: $DB_MONGO_HOST"
+              echo "Puerto extraído: $DB_MONGO_PORT"
+          else
+              echo "No se encontró DB_MONGO_URL en el archivo .env"
+          fi
+
+          # Reemplazar en el archivo .env
+          echo "Actualizando archivo .env"
+
+          # Escapar caracteres para sed (/, &, etc.)
+          ESCAPED_DB_PASSWORD=$(printf '%s\n' "$DB_PASSWORD" | sed 's/[\/&]/\\&/g')
+          ESCAPED_DB_USERNAME=$(printf '%s\n' "$DB_USERNAME" | sed 's/[\/&]/\\&/g')
+          ESCAPED_MONGO_USER=$(printf '%s\n' "$DB_MONGO_USER" | sed 's/[\/&]/\\&/g')
+          ESCAPED_MONGO_PASS=$(printf '%s\n' "$DB_MONGO_PASS" | sed 's/[\/&]/\\&/g')
+          ESCAPED_MONGO_HOST=$(printf '%s\n' "$DB_MONGO_HOST" | sed 's/[\/&]/\\&/g')
+
+          # Armar URL de Mongo
+          MONGO_URL="mongodb://${ESCAPED_MONGO_USER}:${ESCAPED_MONGO_PASS}@${ESCAPED_MONGO_HOST}:${DB_MONGO_PORT}/"
+
+          # Sustituir líneas en .env
+          sed -i "s|^DB_USERNAME=.*|DB_USERNAME=$ESCAPED_DB_USERNAME|" /app/.env
+          sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=$ESCAPED_DB_PASSWORD|" /app/.env
+          sed -i "s|^DB_MONGO_URL=.*|DB_MONGO_URL=\"$MONGO_URL\"|" /app/.env
+
+          echo "Archivo .env actualizado correctamente."
+        image: busybox:1.36
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 100m
+            ephemeral-storage: 10Mi
+            memory: 64Mi
+          requests:
+            cpu: 50m
+            ephemeral-storage: 10Mi
+            memory: 32Mi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+        - mountPath: /secrets
+          name: credentials
+        - mountPath: /app
+          name: fixed-env
+
+      - name: oaj-migrations
+        env:
+        - name: APACHE_DOCUMENT_ROOT
+          value: /var/www/html/public
+        - name: TZ
+          value: "America/Mexico_City"
+        image: "app-image"
+        command: ["php", "artisan", "migrate", "--force"]
+        resources:
+          limits:
+            cpu: 200m
+            ephemeral-storage: 128Mi
+            memory: 128Mi
+          requests:
+            cpu: 200m
+            ephemeral-storage: 128Mi
+            memory: 128Mi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
+        volumeMounts:
+        - mountPath: /var/www/html/.env
+          name: fixed-env
+          subPath: .env
+      containers:
+      - env:
+        - name: APACHE_DOCUMENT_ROOT
+          value: /var/www/html/public
+        - name: TZ
+          value: "America/Mexico_City"
+        image: "app-image"
+        imagePullPolicy: IfNotPresent
+        name: oaj-sha256-1
+        resources:
+          limits:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 250Mi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 1Gi
+            memory: 125Mi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/www/html/.env
+          name: fixed-env
+          subPath: .env
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccount: oaj-sa
+      serviceAccountName: oaj-sa
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - csi:
+          driver: secrets-store-gke.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: oaj-secret-file
+        name: credentials
+      - configMap:
+          defaultMode: 420
+          name: oaj-env
+        name: config-volume
+      - emptyDir: {}
+        name: fixed-env

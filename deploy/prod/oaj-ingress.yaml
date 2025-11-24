@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: oaj-app-staticip
+    kubernetes.io/ingress.allow-http: "false"
+    ingress.gcp.kubernetes.io/pre-shared-cert: poderjudicial-global-cert
+  name: oaj-app
+  namespace: conatrib
+spec:
+  defaultBackend:
+    service:
+      name: oaj-app
+      port:
+        number: 80

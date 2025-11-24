@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/backend-config: '{"default": "oaj-app-backendconfig"}'
+  labels:
+    app: oaj-app
+  name: oaj-app
+  namespace: conatrib
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: oaj-app
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

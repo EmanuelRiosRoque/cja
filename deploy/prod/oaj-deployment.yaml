@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oaj-app
+  name: oaj-app
+  namespace: conatrib
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: oaj-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: oaj-app
+    spec:
+      initContainers:
+        - env:
+            - name: APACHE_DOCUMENT_ROOT
+              value: /var/www/html/public
+          image: "app-image"
+          command: ["php", "artisan", "migrate", "--force"]
+          name: oaj-migrations
+          volumeMounts:
+            - mountPath: /var/www/html/.env
+              name: config-volume
+              subPath: .env
+      containers:
+        - env:
+            - name: APACHE_DOCUMENT_ROOT
+              value: /var/www/html/public
+          image: "app-image"
+          imagePullPolicy: IfNotPresent
+          name: oaj-sha256-1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 1000m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 1Gi
+              memory: 500Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /var/www/html/.env
+              name: config-volume
+              subPath: .env
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: oaj-env
+          name: config-volume
